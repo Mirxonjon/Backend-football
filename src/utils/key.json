@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "footballprojectinuzb",
+  "private_key_id": "d387e56468fe883fb305c100a68984d99a3b155f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDgNhxyuQGjZyYt\nx5x6V9983DrXcP9hUi85jfmd4KpgCfU/0mg6pZEUrWX7p6ugq924JlOcUsTTNKMy\naXiZ/BdpD235J5ZZYHHljdBH4+G0H6b/b/qFYUyTcr7XtLYO0H2N4zy6UFmnpEh/\nOl1YyCpCMuBJLaUvFfamSG0AcAjr3jBMY2hlqjKEeBFdm9t3xAqu2Chd5j/0XwyI\nswinoASCavbrCg/N8DUxTGEa0rKARP59IWjPiIgjC31GuFZ0hNmhDzMqhiLT7u+W\nipAxFaZCoQajDOc4bz8Ev3SDkFFq5E0IZNroL/XfT2PpqM150oXvzqQlkPWWoxcX\n9lD/KRLLAgMBAAECggEAVBfnhp3eP+/NsYj3JynzME0XoruGhXWCMeeOsojTzi6d\n9iCQKEL2DdfVctRZ+mrLv6hcXrrqiL7q4NsPOU4EZ8q6OCOBcCdMwMj2UChn/JuM\nkqzovQMX6gu1CYmFaTwIg2Gx4r2FSuvCpzl4TnbQ5sBXQAsnM+hceNScUXgz2Gbr\nSi3/eHQqvF9h7h75pT4oRo0/RFZOZ8VMkQ7zVWiNfR1A9T+ZOYD52vHdc8S6WBli\n3Y8rtwcinJ1Pzd4WFKuvVWmpVcWmM4Of2qWZhz0+mbWcAtNsipRHMFJpSgv2FiYR\nNa7nH3OisUPzyWjMu4JGgX3GEezlw1t9tfJdFdKuDQKBgQD4DbcIC3CvZkuozZ6L\njcvo7LMRxyLHaqBCkIkdzuS15FSOFt7EHPepsgoRGcg55L7DSWL2LcsR8bwmOiqv\nQvZCHncvvFkrUnzrbdndUMZAJJ7nE/z9fNi0D/hviuGpKz1Xtd/08cCKpn2nR4bh\noW1BMii0y/vh3IsdYb0VhCxCXwKBgQDnZN3RomBuHw1iiu3NQ4Mghvp3vKbVO9yP\nrJwUcyhfHN58lzyq8uZAuvmXr/3KPCjBAvNOFuxeScO7JLd6tEpsBwnRb1zz/oHz\nw2bnM57EKGO+ZR9isejPt/RFOHMABelBQkqxNUvIggtAdv0L3L0LQPcIt9y+iBL5\nw7hmxHX/FQKBgQDvWSSEMa3AwV89+XIDTIY2Mbcz70eCzkLnF9oGli0fybtBA5Zd\n+2mKJ44JJCyMmEjt3LENw/APV4bqB/RJ+r3t3MG6oO4VnFmHPg8buyYgnHVrmWDj\nI4VicYqR7puCBYQCTy9ThbX401+pep4OtxnZ79FRawaX0Ju3dSjjSw791wKBgQDL\nnTmHz6+1F0QK859/4SmQxNW/6VSRDITwNH5/jDn5QAkTb22mK+mrChy5etcDT165\nQORiUc+axKQkmJGPuvhGCQd9sNYFqm4l10tEpWrOx4/FqWwtx8nKht++zYZ8fbcc\ngr4BI5nVDYHjLxFKj+oV7guzMz9etZSlDbHFVJlUZQKBgCz7Polmuwi+9TQiJYlm\nNyRNus2cpjcZZG673z4JhBcEdXDQW/LhCJT72uFdby9VtkLYXXyCiRFcD5OQ3qJP\n/vNN22lUcN6Ctq8n56J6YKUfRUBPotHSgk7nrIvSOywxvfzsb3RDkz9ke3gZUeFv\nf6Jjx3yhwLuUI1lpcqNJeO1O\n-----END PRIVATE KEY-----\n",
+  "client_email": "football-project@footballprojectinuzb.iam.gserviceaccount.com",
+  "client_id": "113287042100172219122",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/football-project%40footballprojectinuzb.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
