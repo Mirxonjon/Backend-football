@@ -28,7 +28,7 @@ export const connectDb: TypeOrmModuleOptions = {
     BooksCategoriesEntity,
     BooksEntity,
     TakeEntity,
-    TakeBooksEntity
+    TakeBooksEntity,
   ],
   autoLoadEntities: true,
   synchronize: true,

@@ -2,13 +2,13 @@ import { v4 } from 'uuid';
 import { Storage } from '@google-cloud/storage';
 import { extname, join, resolve } from 'path';
 
-const projectId = 'footballprojectinuzb';
+const projectId = 'telecom-398714';
 const keyFilename = resolve(process.cwd(), 'src', 'utils', 'key.json');
 const storage = new Storage({
   projectId,
   keyFilename,
 });
-const bucket = storage.bucket('footballprojectinuzb');
+const bucket = storage.bucket('telecom2003');
 
 export const googleCloud = (file: any | any[]) => {
   const a: any[] = [];
@@ -18,9 +18,24 @@ export const googleCloud = (file: any | any[]) => {
   const blobStream = blob.createWriteStream();
 
   blobStream.on('error', (err) => {
-    console.log(err);
+    console.log(err, 'shu yerda mnmnnnnnn');
   });
 
   blobStream.end(a[0]?.buffer);
+  return imageLink;
+};
+
+export const deleteFileCloud = async (imageLink: string) => {
+  new Promise((resolve, reject) => {
+    const blob = bucket
+      .file(imageLink)
+      .delete()
+      .then((image) => {
+        resolve(imageLink);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
   return imageLink;
 };
