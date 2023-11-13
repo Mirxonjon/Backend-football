@@ -1,6 +1,7 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -23,6 +24,9 @@ export class BooksCategoriesEntity extends BaseEntity {
     nullable: false,
   })
   title_ru: string;
+
+  @CreateDateColumn({ name: 'created_at' })
+  create_data: Date;
 
   @OneToMany(() => BooksEntity, (books) => books.category_id)
   books: BooksEntity[];

@@ -9,6 +9,7 @@ import { BooksCategoriesEntity } from 'src/entities/books_Categories.entity';
 import { BooksEntity } from 'src/entities/books.entity';
 import { TakeEntity } from 'src/entities/take.entity';
 import { TakeBooksEntity } from 'src/entities/take_books.entity';
+import { MasterclassEntity } from 'src/entities/masterclass';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ export const connectDb: TypeOrmModuleOptions = {
     BooksEntity,
     TakeEntity,
     TakeBooksEntity,
+    MasterclassEntity
   ],
   autoLoadEntities: true,
   synchronize: true,

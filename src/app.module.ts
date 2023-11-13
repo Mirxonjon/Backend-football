@@ -10,6 +10,7 @@ import { TacticCategoriesModule } from './module/tactic_categories/tactic_catego
 import { TacticVideosModule } from './module/tactic_videos/tactic_videos.module';
 import { BooksCategoriesModule } from './module/book_categories/book_categories.module';
 import { BooksModule } from './module/books/books.module';
+import { MasterClassModule } from './module/masterclass/masterclass.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { BooksModule } from './module/books/books.module';
     TacticVideosModule,
     BooksCategoriesModule,
     BooksModule,
+    MasterClassModule
   ],
   controllers: [],
   providers: [],

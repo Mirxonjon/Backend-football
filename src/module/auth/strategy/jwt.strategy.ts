@@ -22,6 +22,8 @@ export class jwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(req: CustomRequest, payload: any) {
+    console.log(payload);
+    
     const findAdmin = await UsersEntity.findOne({
       where: {
         id: payload.id,

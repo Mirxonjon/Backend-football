@@ -17,6 +17,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
@@ -35,6 +36,7 @@ import { jwtGuard } from '../auth/guards/jwt.guard';
 
 @Controller('tacticCategories')
 @ApiTags('Tactic categories')
+@ApiBearerAuth('JWT-auth')
 export class TacticCategoriesController {
   readonly #_service: TacticCategoriesService;
   constructor(service: TacticCategoriesService) {

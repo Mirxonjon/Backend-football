@@ -1,6 +1,7 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -58,6 +59,9 @@ export class BooksEntity extends BaseEntity {
     nullable: false,
   })
   book_lang: string;
+  @CreateDateColumn({ name: 'created_at' })
+  create_data: Date;
+  
   @ManyToOne(() => BooksCategoriesEntity, (categories) => categories.books, {
     onDelete: 'CASCADE',
   })

@@ -1,6 +1,7 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -62,6 +63,9 @@ export class TacticVideosEntity extends BaseEntity {
     nullable: false,
   })
   description_tactic_ru: string;
+
+  @CreateDateColumn({ name: 'created_at' })
+  create_data: Date;
 
   @ManyToOne(
     () => TacticCategoriesEntity,

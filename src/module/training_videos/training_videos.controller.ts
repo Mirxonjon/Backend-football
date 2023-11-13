@@ -19,6 +19,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
@@ -43,6 +44,7 @@ import { AuthServise } from '../auth/auth.service';
 import { CustomHeaders } from 'src/types';
 @Controller('TrainingVideos')
 @ApiTags('Training Videos')
+@ApiBearerAuth('JWT-auth')
 export class TrainingVideosController {
   readonly #_service: TrainingVideosServise;
   constructor(service: TrainingVideosServise ) {

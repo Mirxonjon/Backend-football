@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiHeader,
@@ -28,6 +29,7 @@ import { jwtGuard } from '../auth/guards/jwt.guard';
 
 @Controller('BooksCategories')
 @ApiTags('Books categories')
+@ApiBearerAuth('JWT-auth')
 export class BooksCategoriesController {
   readonly #_service: BooksCategoriesService;
   constructor(service: BooksCategoriesService) {

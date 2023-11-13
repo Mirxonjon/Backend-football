@@ -19,6 +19,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
@@ -40,6 +41,7 @@ import { UpdateTacticVideosDto } from './dto/update_tactic_video.dto';
 import { jwtGuard } from '../auth/guards/jwt.guard';
 @Controller('tacticVideos')
 @ApiTags('Tactic Videos')
+@ApiBearerAuth('JWT-auth')
 export class TacticVideosController {
   readonly #_service: TacticVideosServise;
   constructor(service: TacticVideosServise) {

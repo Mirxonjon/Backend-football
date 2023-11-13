@@ -19,6 +19,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
@@ -40,6 +41,7 @@ import { UpdateBookDto } from './dto/update_book.dto';
 import { jwtGuard } from '../auth/guards/jwt.guard';
 @Controller('Books')
 @ApiTags('Book')
+@ApiBearerAuth('JWT-auth')
 export class BooksController {
   readonly #_service: BooksServise;
   constructor(service: BooksServise) {

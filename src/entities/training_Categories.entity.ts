@@ -1,6 +1,7 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -50,6 +51,9 @@ export class TrainingCategoriesEntity extends BaseEntity {
     nullable: false,
   })
   image: string;
+
+  @CreateDateColumn({ name: 'created_at' })
+  create_data: Date;
 
   @OneToMany(() => TrainingVideosEntity, (videos) => videos.category_id)
   Training_videos: TrainingVideosEntity[];
