@@ -10,6 +10,9 @@ import { BooksEntity } from 'src/entities/books.entity';
 import { TakeEntity } from 'src/entities/take.entity';
 import { TakeBooksEntity } from 'src/entities/take_books.entity';
 import { MasterclassEntity } from 'src/entities/masterclass';
+import { ShortBookCategoriesEntity } from 'src/entities/short_book_Categories.entity';
+import { ShortBooksEntity } from 'src/entities/short_books.entity';
+import { TrainingSubCategoriesEntity } from 'src/entities/training_sub_Category';
 
 dotenv.config();
 
@@ -23,6 +26,7 @@ export const connectDb: TypeOrmModuleOptions = {
   entities: [
     UsersEntity,
     TrainingCategoriesEntity,
+    TrainingSubCategoriesEntity,
     TrainingVideosEntity,
     TacticCategoriesEntity,
     TacticVideosEntity,
@@ -30,7 +34,9 @@ export const connectDb: TypeOrmModuleOptions = {
     BooksEntity,
     TakeEntity,
     TakeBooksEntity,
-    MasterclassEntity
+    MasterclassEntity,
+    ShortBookCategoriesEntity,
+    ShortBooksEntity
   ],
   autoLoadEntities: true,
   synchronize: true,

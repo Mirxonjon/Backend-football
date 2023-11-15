@@ -10,7 +10,6 @@ import {
   Patch,
   Post,
   Query,
-  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -44,7 +43,7 @@ export class TrainingCategoriesController {
     this.#_service = service;
   }
 
-  @Get('/all')
+  @Get('/all') 
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
@@ -61,17 +60,12 @@ export class TrainingCategoriesController {
   }
 
   @Get('/one/:id')
-  // @ApiBearerAuth()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  @ApiHeader({
-    name: 'access_token',
-    description: 'UserToken token',
-    required: false,
-  })
-  async findOne( @Param('id') id: string ,  @Headers() headers: CustomHeaders) {
-     return await this.#_service.findOne(id, headers);
+
+  async findOne( @Param('id') id: string ,  ) {
+     return await this.#_service.findOne(id);
   }
 
   @UseGuards(jwtGuard)
@@ -124,16 +118,10 @@ export class TrainingCategoriesController {
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @ApiHeader({
-    name: 'access_token',
-    description: 'Admin token',
-    required: true,
-  })
   @UseInterceptors(FileInterceptor('image'))
   async create(
     @UploadedFile() image: Express.Multer.File,
     @Body() createTrainingCategory: CreateTrainingCategoryDto,
-    @Headers() header: any,
   ) {
     return await this.#_service.create(createTrainingCategory, image);
   }
@@ -176,19 +164,12 @@ export class TrainingCategoriesController {
   @ApiOperation({ summary: 'Attendance Punch In' })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @ApiHeader({
-    name: 'admin_token',
-    description: 'Admin token',
-    required: true,
-  })
   @UseInterceptors(FileInterceptor('image'))
   async update(
     @Param('id') id: string,
-    @Headers() header: any,
     @Body() updateTrainingCategory: UpdateTrainingCategory,
     @UploadedFile() image: Express.Multer.File,
   ) {
-    // await this.VerifyToken.verifyAdmin(header);
     await this.#_service.update(id, updateTrainingCategory, image);
   }
 
@@ -198,11 +179,6 @@ export class TrainingCategoriesController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiNoContentResponse()
-  @ApiHeader({
-    name: 'autharization',
-    description: 'Admin token',
-    required: true,
-  })
   async remove(@Param('id') id: string): Promise<void> {
     await this.#_service.remove(id);
   }

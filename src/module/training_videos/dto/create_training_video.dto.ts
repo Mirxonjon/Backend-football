@@ -3,7 +3,7 @@ import { IsString, IsNotEmpty, MaxLength, IsNumber } from 'class-validator';
 export class CreateTrainingVideosDto {
   @IsString()
   @IsNotEmpty()
-  training_id: string;
+  sub_category_id: string;
 
   @IsString()
   @IsNotEmpty()

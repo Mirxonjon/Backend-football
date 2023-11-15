@@ -104,18 +104,12 @@ export class TacticCategoriesController {
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @ApiHeader({
-    name: 'access_token',
-    description: 'Admin token',
-    required: true,
-  })
+
   @UseInterceptors(FileInterceptor('image'))
   async create(
     @UploadedFile() image: Express.Multer.File,
     @Body() createTacticCategory: CreateTacticCategoryDto,
-    @Headers() header: any,
   ) {
-    // console.log('a' , req.userId);
     return await this.#_service.create(createTacticCategory, image);
   }
 
@@ -149,19 +143,13 @@ export class TacticCategoriesController {
   @ApiOperation({ summary: 'Attendance Punch In' })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @ApiHeader({
-    name: 'admin_token',
-    description: 'Admin token',
-    required: true,
-  })
   @UseInterceptors(FileInterceptor('image'))
   async update(
     @Param('id') id: string,
-    @Headers() header: any,
     @Body() updateTacticCategory: UpdateTacticCategory,
     @UploadedFile() image: Express.Multer.File,
   ) {
-    // await this.VerifyToken.verifyAdmin(header);
+
     return await this.#_service.update(id, updateTacticCategory, image);
   }
 
@@ -171,11 +159,7 @@ export class TacticCategoriesController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiNoContentResponse()
-  @ApiHeader({
-    name: 'autharization',
-    description: 'Admin token',
-    required: true,
-  })
+
   async remove(@Param('id') id: string): Promise<void> {
     return await this.#_service.remove(id);
   }

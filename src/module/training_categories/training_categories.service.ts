@@ -36,7 +36,7 @@ export class TrainingCategoriesService {
     return allTrainingCategory;
   }
 
-  async findOne(id: string,  header: CustomHeaders) {
+  async findOne(id: string) {
 
     const findCategory: any =
       await TrainingCategoriesEntity.findOne({
@@ -44,62 +44,63 @@ export class TrainingCategoriesService {
           id: id,
         },
         relations: {
-          Training_videos: true,
+          Training_sub_category:  true
         },
         order : {
-          Training_videos: {
-            sequence: 'ASC'
+          Training_sub_category: {
+            create_data :'desc'
           }
         },
  
       });
-      let allCourseVideos= [...findCategory.Training_videos]
+      return findCategory
+      // let allCourseVideos= [...findCategory.Training_videos]
       
-      if(header.access_token){
+      // if(header.access_token){
 
-        const user  = await this.#_authService.verify(header.access_token)
+      //   const user  = await this.#_authService.verify(header.access_token)
         
-        if (user.id && TrainingCategoriesEntity) {
-          for (let i : number = 0; i < allCourseVideos.length; i++) {
-              allCourseVideos[i].active = true
-              allCourseVideos[i].link = allCourseVideos[i].video_link
-          }
-          return findCategory;
-        } else {
-          for (let i : number = 0; i < allCourseVideos.length; i++) {
-            if(i => 2) {
-              allCourseVideos[i].active = false
-              allCourseVideos[i].video_link.split()
-              allCourseVideos[i].link = allCourseVideos[i].video_link
-                .split('')
-                .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
-                .join('');
-            } else {
-              allCourseVideos[i].active = true
-              allCourseVideos[i].link = allCourseVideos[i].video_link
-            }
-          }
-          findCategory.Training_videos = allCourseVideos
-          return findCategory
-        }
-        // return findCategory;
-      } else {
-        for (let i : number = 0; i < allCourseVideos.length; i++) {
-          if(i => 2) {
-            allCourseVideos[i].active = false
-            allCourseVideos[i].video_link.split()
-            allCourseVideos[i].link = allCourseVideos[i].video_link
-              .split('')
-              .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
-              .join('');
-          } else {
-            allCourseVideos[i].active = true
-            allCourseVideos[i].link = allCourseVideos[i].video_link
-          }
-        }
-        findCategory.Training_videos = allCourseVideos
-        return findCategory
-      }
+      //   if (user.id && TrainingCategoriesEntity) {
+      //     for (let i : number = 0; i < allCourseVideos.length; i++) {
+      //         allCourseVideos[i].active = true
+      //         allCourseVideos[i].link = allCourseVideos[i].video_link
+      //     }
+      //     return findCategory;
+      //   } else {
+      //     for (let i : number = 0; i < allCourseVideos.length; i++) {
+      //       if(i => 2) {
+      //         allCourseVideos[i].active = false
+      //         allCourseVideos[i].video_link.split()
+      //         allCourseVideos[i].link = allCourseVideos[i].video_link
+      //           .split('')
+      //           .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
+      //           .join('');
+      //       } else {
+      //         allCourseVideos[i].active = true
+      //         allCourseVideos[i].link = allCourseVideos[i].video_link
+      //       }
+      //     }
+      //     findCategory.Training_videos = allCourseVideos
+      //     return findCategory
+      //   }
+      //   // return findCategory;
+      // } else {
+      //   for (let i : number = 0; i < allCourseVideos.length; i++) {
+      //     if(i => 2) {
+      //       allCourseVideos[i].active = false
+      //       allCourseVideos[i].video_link.split()
+      //       allCourseVideos[i].link = allCourseVideos[i].video_link
+      //         .split('')
+      //         .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
+      //         .join('');
+      //     } else {
+      //       allCourseVideos[i].active = true
+      //       allCourseVideos[i].link = allCourseVideos[i].video_link
+      //     }
+      //   }
+      //   findCategory.Training_videos = allCourseVideos
+      //   return findCategory
+      // }
       }
 
 

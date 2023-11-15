@@ -13,6 +13,7 @@ import {
 import { TakeEntity } from 'src/entities/take.entity';
 import { AuthServise } from '../auth/auth.service';
 import { CustomHeaders } from 'src/types';
+import { TrainingSubCategoriesEntity } from 'src/entities/training_sub_Category';
 
 @Injectable()
 export class TrainingVideosServise {
@@ -21,82 +22,82 @@ export class TrainingVideosServise {
     this.#_auth = auth
   }
 
-  async getall(category_id: string, header: any) {
-    const userId = 'uuu';
-    const findCategory = await TrainingCategoriesEntity.findOne({
-      where : {
-        id: category_id
-      },
-    }).catch((e) => {
-      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-    });
-    if (!findCategory) {
-      throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
-    }
+  // async getall(category_id: string, header: any) {
+  //   const userId = 'uuu';
+  //   const findCategory = await TrainingCategoriesEntity.findOne({
+  //     where : {
+  //       id: category_id
+  //     },
+  //   }).catch((e) => {
+  //     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+  //   });
+  //   if (!findCategory) {
+  //     throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+  //   }
 
-    const allVideosCategory: any[] = await TrainingVideosEntity.find({
-      where: {
-        category_id: {
-          id: findCategory.id,
-        },
-      },
-      order: {
-        sequence: 'ASC',
-      },
-    }).catch((e) => {
-      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-    });
+  //   const allVideosCategory: any[] = await TrainingVideosEntity.find({
+  //     where: {
+  //       category_id: {
+  //         id: findCategory.id,
+  //       },
+  //     },
+  //     order: {
+  //       sequence: 'ASC',
+  //     },
+  //   }).catch((e) => {
+  //     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+  //   });
 
-    if (!allVideosCategory) {
-      throw new HttpException('Videos not found', HttpStatus.NOT_FOUND);
-    }
+  //   if (!allVideosCategory) {
+  //     throw new HttpException('Videos not found', HttpStatus.NOT_FOUND);
+  //   }
 
-    const allCourseVideos = [...allVideosCategory];
+  //   const allCourseVideos = [...allVideosCategory];
 
-    if (userId) {
-      const userTakeCourse = await TakeEntity.findOneBy({
-        user_id: {
-          id: userId,
-        },
-      }).catch(() => {
-        throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
-      });
+  //   if (userId) {
+  //     const userTakeCourse = await TakeEntity.findOneBy({
+  //       user_id: {
+  //         id: userId,
+  //       },
+  //     }).catch(() => {
+  //       throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
+  //     });
 
-      if (userTakeCourse.active) {
-        for (let i = 0; i < allCourseVideos.length; i++) {
-          allCourseVideos[i].video_active = true;
-        }
+  //     if (userTakeCourse.active) {
+  //       for (let i = 0; i < allCourseVideos.length; i++) {
+  //         allCourseVideos[i].video_active = true;
+  //       }
 
-        return allCourseVideos;
-      } else {
-        for (let i = 0; i < allCourseVideos.length; i++) {
-          if (i > 1) {
-            allCourseVideos[i].video_active = false;
-            allCourseVideos[i].link = allCourseVideos[i].video_link
-              .split('')
-              .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
-              .join('');
-          } else {
-            allCourseVideos[i].video_active = true;
-          }
-        }
-        return allCourseVideos;
-      }
-    } else {
-      for (let i = 0; i < allCourseVideos.length; i++) {
-        if (i > 1) {
-          allCourseVideos[i].video_active = false;
-          allCourseVideos[i].link = allCourseVideos[i].video_link
-            .split('')
-            .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
-            .join('');
-        } else {
-          allCourseVideos[i].video_active = false;
-        }
-      }
-      return allCourseVideos;
-    }
-  }
+  //       return allCourseVideos;
+  //     } else {
+  //       for (let i = 0; i < allCourseVideos.length; i++) {
+  //         if (i > 1) {
+  //           allCourseVideos[i].video_active = false;
+  //           allCourseVideos[i].link = allCourseVideos[i].video_link
+  //             .split('')
+  //             .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
+  //             .join('');
+  //         } else {
+  //           allCourseVideos[i].video_active = true;
+  //         }
+  //       }
+  //       return allCourseVideos;
+  //     }
+  //   } else {
+  //     for (let i = 0; i < allCourseVideos.length; i++) {
+  //       if (i > 1) {
+  //         allCourseVideos[i].video_active = false;
+  //         allCourseVideos[i].link = allCourseVideos[i].video_link
+  //           .split('')
+  //           .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
+  //           .join('');
+  //       } else {
+  //         allCourseVideos[i].video_active = false;
+  //       }
+  //     }
+  //     return allCourseVideos;
+  //   }
+  // }
 
   async findOne(id: string, header: CustomHeaders) {
     const findVideo = await TrainingVideosEntity.findOneBy({ id });
@@ -117,7 +118,7 @@ export class TrainingVideosServise {
       throw new HttpException('token hato', HttpStatus.NOT_FOUND);
       }
     } else {
-      findVideo.video_link = `fdsfahbs${findVideo.video_link}`;
+      findVideo.video_link = `fdsfahbs${findVideo.video_link}ghefhjrtu`;
       
       return findVideo;
     }
@@ -145,15 +146,15 @@ export class TrainingVideosServise {
       );
     }
 
-    const findCategory = await TrainingCategoriesEntity.findOne({
+    const findSubCategory = await TrainingSubCategoriesEntity.findOne({
       where: {
-        id: body.training_id,
+        id: body.sub_category_id,
       },
     }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    if (!findCategory) {
+    if (!findSubCategory) {
       throw new HttpException(
         'Training Category not found',
         HttpStatus.NOT_FOUND,
@@ -179,7 +180,7 @@ export class TrainingVideosServise {
             description_tactic_ru: body.description_tactic_ru,
             tactic_img: linkImage,
             video_link: linkVideo,
-            category_id: findCategory,
+            sub_Category_id: findSubCategory,
           })
           .execute()
           .catch((e) => {
@@ -208,13 +209,14 @@ export class TrainingVideosServise {
   ) {
     const findVideo = await TrainingVideosEntity.findOne({
       where: { id },
-      relations: { category_id: true },
-      select: { category_id: { id: true } },
+      relations: { sub_Category_id: true },
+      select: { sub_Category_id: { id: true } },
     });
 
     if (!findVideo) {
       throw new HttpException('Video not found', HttpStatus.NOT_FOUND);
     }
+    const findSubCategory = await TrainingSubCategoriesEntity.findOneBy({id :body.sub_category_id})
 
     let formatImage: string = 'Not image';
     let formatVideo: string = 'Not video';
@@ -226,7 +228,6 @@ export class TrainingVideosServise {
       formatVideo = extname(video.originalname).toLowerCase();
     }
 
-    // Formatni tekshirish va qo'shilgan fayllarni o'zgartirish
     if (
       allowedImageFormats.includes(formatImage) ||
       formatImage === 'Not image'
@@ -235,21 +236,19 @@ export class TrainingVideosServise {
         allowedVideoFormats.includes(formatVideo) ||
         formatVideo === 'Not video'
       ) {
-        // Rasm va video o'zgartirishlari
         let tactic_img = findVideo.tactic_img;
         let video_link = findVideo.video_link;
 
         if (formatImage !== 'Not image') {
-          await deleteFileCloud(tactic_img); // Eski rasmni o'chirish
-          tactic_img = googleCloud(image); // Yangi rasmini saqlash
+          await deleteFileCloud(tactic_img); 
+          tactic_img = googleCloud(image);
         }
 
         if (formatVideo !== 'Not video') {
-          await deleteFileCloud(video_link); // Eski videoni o'chirish
-          video_link = googleCloud(video); // Yangi videoni saqlash
+          await deleteFileCloud(video_link); 
+          video_link = googleCloud(video); 
         }
 
-        // Ma'lumotlarni yangilash
         const updatedVideo = await TrainingVideosEntity.update(id, {
           title: body.title || findVideo.title,
           title_ru: body.title_ru || findVideo.title_ru,
@@ -261,9 +260,8 @@ export class TrainingVideosServise {
             body.description_tactic_ru || findVideo.description_tactic_ru,
           tactic_img,
           video_link,
-          category_id: body.training_id || (findVideo.category_id.id as any),
+          sub_Category_id : findSubCategory || findVideo.sub_Category_id ,
         });
-
         return updatedVideo;
       } else {
         throw new HttpException(

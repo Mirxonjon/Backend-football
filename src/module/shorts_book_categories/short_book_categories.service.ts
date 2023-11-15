@@ -1,26 +1,26 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateBookCategoryDto } from './dto/create-book_category.dto';
-import { UpdateBookCategory } from './dto/update-book_category.dto';
-import { BooksCategoriesEntity } from 'src/entities/books_Categories.entity';
+import {  CreateShortBookCategoryDto } from './dto/create-short_book_category.dto';
+import {  UpdateShortBookCategory } from './dto/update-short_book_category.dto';
+import { ShortBookCategoriesEntity } from 'src/entities/short_book_Categories.entity';
 @Injectable()
-export class BooksCategoriesService {
+export class ShortBooksCategoriesService {
 
   async getall() {
-    const allBookCategory = await BooksCategoriesEntity.find().catch((e) => {
+    const allShortBookCategory = await ShortBookCategoriesEntity.find().catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    return allBookCategory;
+    return allShortBookCategory;
   }
 
   async findOne(id: string) {
-    const findCategory: BooksCategoriesEntity =
-      await BooksCategoriesEntity.findOne({
+    const findCategory: ShortBookCategoriesEntity =
+      await ShortBookCategoriesEntity.findOne({
         where: {
           id: id,
         },
         relations: {
-          books: true,
+          short_books: true,
         },
       });
 
@@ -30,11 +30,12 @@ export class BooksCategoriesService {
           HttpStatus.NOT_FOUND,
         );
       }
+
     return findCategory;
   }
 
-  async create(body: CreateBookCategoryDto) {
-    const findCategory = await BooksCategoriesEntity.findOneBy({
+  async create(body: CreateShortBookCategoryDto) {
+    const findCategory = await ShortBookCategoriesEntity.findOneBy({
       title: body.title,
     });
 
@@ -44,9 +45,9 @@ export class BooksCategoriesService {
         HttpStatus.FOUND,
       );
     }
-    await BooksCategoriesEntity.createQueryBuilder()
+    await ShortBookCategoriesEntity.createQueryBuilder()
       .insert()
-      .into(BooksCategoriesEntity)
+      .into(ShortBookCategoriesEntity)
       .values({
         title: body.title,
         title_ru: body.title_ru,
@@ -54,14 +55,14 @@ export class BooksCategoriesService {
       .execute()
       .catch(() => {
         throw new HttpException(
-          'Bad Request ,shu yerdan',
+          'Bad Request ',
           HttpStatus.BAD_REQUEST,
         );
       });
   }
 
-  async update(id: string, body: UpdateBookCategory) {
-    const findCategory = await BooksCategoriesEntity.findOneBy({
+  async update(id: string, body: UpdateShortBookCategory) {
+    const findCategory = await ShortBookCategoriesEntity.findOneBy({
       id: id,
     }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -71,8 +72,8 @@ export class BooksCategoriesService {
       throw new HttpException('Not found Category', HttpStatus.NOT_FOUND);
     }
 
-    await BooksCategoriesEntity.createQueryBuilder()
-      .update(BooksCategoriesEntity)
+    await ShortBookCategoriesEntity.createQueryBuilder()
+      .update(ShortBookCategoriesEntity)
       .set({
         title: body.title || findCategory.title,
         title_ru: body.title_ru || findCategory.title_ru,
@@ -85,7 +86,7 @@ export class BooksCategoriesService {
   }
 
   async remove(id: string) {
-    const findCategory = await BooksCategoriesEntity.findOneBy({
+    const findCategory = await ShortBookCategoriesEntity.findOneBy({
       id: id,
     }).catch(() => {
       throw new HttpException('Not found Category', HttpStatus.BAD_REQUEST);
@@ -98,9 +99,9 @@ export class BooksCategoriesService {
       );
     }
 
-    await BooksCategoriesEntity.createQueryBuilder()
+    await ShortBookCategoriesEntity.createQueryBuilder()
       .delete()
-      .from(BooksCategoriesEntity)
+      .from(ShortBookCategoriesEntity)
       .where({ id })
       .execute();
   }

@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TrainingCategoriesEntity } from './training_Categories.entity';
+import { TrainingSubCategoriesEntity } from './training_sub_Category';
 
 @Entity()
 export class TrainingVideosEntity extends BaseEntity {
@@ -70,12 +71,12 @@ export class TrainingVideosEntity extends BaseEntity {
   create_data: Date;
 
   @ManyToOne(
-    () => TrainingCategoriesEntity,
-    (categories) => categories.Training_videos,
+    () => TrainingSubCategoriesEntity,
+    (sub_Categories) => sub_Categories.Training_videos,
     {
       onDelete: 'CASCADE',
     },
   )
   @JoinColumn({ name: 'category_id' })
-  category_id: TrainingCategoriesEntity;
+  sub_Category_id: TrainingCategoriesEntity;
 }

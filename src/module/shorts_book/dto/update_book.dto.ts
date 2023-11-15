@@ -1,8 +1,8 @@
 import { IsString, MaxLength } from 'class-validator';
 
-export class UpdateTrainingVideosDto {
+export class UpdateShortBookDto {
   @IsString()
-  sub_category_id: string;
+  category_id: string;
 
   @IsString()
   @MaxLength(200)
@@ -13,15 +13,11 @@ export class UpdateTrainingVideosDto {
   title_ru: string;
 
   @IsString()
-  @MaxLength(10)
-  duration: string;
+  description_book: string;
 
   @IsString()
-  sequence: number;
+  description_book_ru: string;
 
   @IsString()
-  description_tactic: string;
-
-  @IsString()
-  description_tactic_ru: string;
+  short_book_lang: string;
 }

@@ -16,7 +16,7 @@ export class UsersEntity extends BaseEntity {
 
   @Column({
     type: 'character varying',
-    length: 100,
+    length: 200,
     nullable: true,
   })
   surname: string;

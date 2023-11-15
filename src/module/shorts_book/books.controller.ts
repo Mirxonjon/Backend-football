@@ -2,13 +2,17 @@ import {
   Body,
   Controller,
   Delete,
+  FileTypeValidator,
   Get,
   Headers,
   HttpCode,
   HttpStatus,
   Param,
+  ParseFilePipe,
+  ParseFilePipeBuilder,
   Patch,
   Post,
+  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -19,57 +23,45 @@ import {
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
-  ApiHeader,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { TrainingVideosServise } from './training_videos.service';
+import { ShortBooksServise } from './books.service';
 import {
   FileFieldsInterceptor,
 } from '@nestjs/platform-express';
-import { CreateTrainingVideosDto } from './dto/create_training_video.dto';
-import { UpdateTrainingVideosDto } from './dto/update_training_video.dto';
+import { CreateShortBookDto } from './dto/create_book.dto';
+import { UpdateShortBookDto } from './dto/update_book.dto';
 import { jwtGuard } from '../auth/guards/jwt.guard';
-import { CustomHeaders } from 'src/types';
-@Controller('TrainingVideos')
-@ApiTags('Training Videos')
+@Controller('ShortBooks')
+@ApiTags('Short Books')
 @ApiBearerAuth('JWT-auth')
-export class TrainingVideosController {
-  readonly #_service: TrainingVideosServise;
-  constructor(service: TrainingVideosServise ) {
+export class ShortBooksController {
+  readonly #_service: ShortBooksServise;
+  constructor(service: ShortBooksServise) {
     this.#_service = service;
   }
-
-
-  // @Get('/allbyCourse/:categoryid')
-  // @ApiBadRequestResponse()
-  // @ApiNotFoundResponse()
-  // @ApiOkResponse()
-  // @ApiHeader({
-  //   name: 'access_token',
-  //   description: 'User token',
-  //   required: false,
-  // })
-  // async getall(@Param('categoryid') id: string, @Headers() header: CustomHeaders) {
-  //   return await this.#_service.getall(id, header);
-  // }
 
   @Get('/one/:id')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  @ApiHeader({
-    name: 'access_token',
-    description: 'User token',
-    required: false,
-  })
-  async findOne(@Param('id') id: string, @Headers() header: CustomHeaders) {
-    
-    return await this.#_service.findOne(id, header);
+
+  async findOne(@Param('id') id: string) {
+    return await this.#_service.findOne(id);
   }
+
+  @Get('/all')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findAll() {
+    return await this.#_service.findAll();
+  }
+
 
   @UseGuards(jwtGuard)
   @Post('create')
@@ -78,18 +70,17 @@ export class TrainingVideosController {
     schema: {
       type: 'object',
       required: [
-        'sub_category_id',
+        'category_id',
         'title',
         'title_ru',
-        'duration',
-        'sequence',
-        'description_tactic',
-        'description_tactic_ru',
-        'video',
+        'description_book',
+        'description_book_ru',
+        'short_book_lang',
+        'short_book',
         'image',
       ],
       properties: {
-        sub_category_id: {
+        category_id: {
           type: 'string',
           default: '55cc8c2d-34c1-4ca3-88e0-7b1295875642',
         },
@@ -101,23 +92,19 @@ export class TrainingVideosController {
           type: 'string',
           default: '1 chi darsru',
         },
-        duration: {
+        short_book_lang: {
           type: 'string',
-          default: '9:10m',
+          default: 'ru',
         },
-        sequence: {
-          type: 'number',
-          default: 1,
-        },
-        description_tactic: {
+        description_book: {
           type: 'string',
           default: 'uuid23422',
         },
-        description_tactic_ru: {
+        description_book_ru: {
           type: 'string',
           default: 'Хорошее обучение',
         },
-        video: {
+        short_book: {
           type: 'string',
           format: 'binary',
         },
@@ -133,18 +120,16 @@ export class TrainingVideosController {
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @UseInterceptors(
-    FileFieldsInterceptor([{ name: 'video' }, { name: 'image' }]),
-  )
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'short_book' }, { name: 'image' }]))
   async create(
     @UploadedFiles()
-    videos: { video?: Express.Multer.File; image?: Express.Multer.File },
-    @Body() createTrainingVideo: CreateTrainingVideosDto,
+    files: { short_book?: Express.Multer.File; image?: Express.Multer.File },
+    @Body() createShortBook: CreateShortBookDto,
   ) {
     return await this.#_service.create(
-      createTrainingVideo,
-      videos.video[0],
-      videos.image[0],
+      createShortBook,
+      files.short_book[0],
+      files.image[0],
     );
   }
 
@@ -155,7 +140,7 @@ export class TrainingVideosController {
     schema: {
       type: 'object',
       properties: {
-        sub_category_id: {
+        category_id: {
           type: 'string',
           default: '55cc8c2d-34c1-4ca3-88e0-7b1295875642',
         },
@@ -167,23 +152,20 @@ export class TrainingVideosController {
           type: 'string',
           default: '1 chi darsru',
         },
-        duration: {
+        short_book_lang: {
           type: 'string',
-          default: '9:10m',
+          default: 'ru',
         },
-        sequence: {
-          type: 'number',
-          default: 1,
-        },
-        description_tactic: {
+        description_book: {
           type: 'string',
           default: 'uuid23422',
         },
-        description_tactic_ru: {
+        description_book_ru: {
           type: 'string',
           default: 'Хорошее обучение',
         },
-        video: {
+
+        short_book: {
           type: 'string',
           format: 'binary',
         },
@@ -198,21 +180,20 @@ export class TrainingVideosController {
   @ApiOperation({ summary: 'Attendance Punch In' })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @UseInterceptors(
-    FileFieldsInterceptor([{ name: 'video' }, { name: 'image' }]),
-  )
+
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'short_book' }, { name: 'image' }]))
   async update(
     @Param('id') id: string,
-    @Body() updateTrainingVideos: UpdateTrainingVideosDto,
+    @Body() updateBook: UpdateShortBookDto,
     @UploadedFiles()
-    videos: { video?: Express.Multer.File; image?: Express.Multer.File },
+    file: { short_book?: Express.Multer.File; image?: Express.Multer.File },
   ) {
 
     await this.#_service.update(
       id,
-      updateTrainingVideos,
-      videos?.video ? videos?.video[0] : null,
-      videos?.image ? videos?.image[0] : null,
+      updateBook,
+      file?.short_book ? file?.short_book[0] : null,
+      file?.image ? file?.image[0] : null,
     );
   }
 
@@ -222,7 +203,6 @@ export class TrainingVideosController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiNoContentResponse()
-
   async remove(@Param('id') id: string): Promise<void> {
     await this.#_service.remove(id);
   }

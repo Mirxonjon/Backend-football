@@ -47,18 +47,6 @@ export class BooksController {
   constructor(service: BooksServise) {
     this.#_service = service;
   }
-  // @Get('/allbyCourse/:categoryid')
-  // @ApiBadRequestResponse()
-  // @ApiNotFoundResponse()
-  // @ApiOkResponse()
-  // @ApiHeader({
-  //   name: 'autharization',
-  //   description: 'User token',
-  //   required: false,
-  // })
-  // async getall(@Param('categoryid') id: string,  @Headers() header: any) {
-  //   return await this.#_service.getall(id ,header);
-  // }
 
   @Get('/one/:id')
   @ApiBadRequestResponse()
@@ -72,6 +60,8 @@ export class BooksController {
   async findOne(@Param('id') id: string, @Headers() header: any) {
     return await this.#_service.findOne(id, header);
   }
+
+
   @UseGuards(jwtGuard)
   @Post('create')
   @HttpCode(HttpStatus.CREATED)
@@ -129,17 +119,11 @@ export class BooksController {
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @ApiHeader({
-    name: 'admin_token',
-    description: 'Admin token',
-    required: true,
-  })
   @UseInterceptors(FileFieldsInterceptor([{ name: 'book' }, { name: 'image' }]))
   async create(
     @UploadedFiles()
     books: { book?: Express.Multer.File; image?: Express.Multer.File },
     @Body() createBook: CreateBookDto,
-    @Headers() header: any,
   ) {
     return await this.#_service.create(
       createBook,
@@ -195,22 +179,15 @@ export class BooksController {
   @ApiOperation({ summary: 'Attendance Punch In' })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @ApiHeader({
-    name: 'admin_token',
-    description: 'Admin token',
-    required: true,
-  })
+
   @UseInterceptors(FileFieldsInterceptor([{ name: 'book' }, { name: 'image' }]))
   async update(
     @Param('id') id: string,
-    @Headers() header: any,
     @Body() updateBook: UpdateBookDto,
     @UploadedFiles()
     book: { book?: Express.Multer.File; image?: Express.Multer.File },
   ) {
-    // console.log(book ,book?.v);
 
-    // await this.VerifyToken.verifyAdmin(header);
     await this.#_service.update(
       id,
       updateBook,
@@ -225,11 +202,6 @@ export class BooksController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiNoContentResponse()
-  @ApiHeader({
-    name: 'autharization',
-    description: 'Admin token',
-    required: true,
-  })
   async remove(@Param('id') id: string): Promise<void> {
     await this.#_service.remove(id);
   }

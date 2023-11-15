@@ -2,17 +2,13 @@ import {
   Body,
   Controller,
   Delete,
-  FileTypeValidator,
   Get,
   Headers,
   HttpCode,
   HttpStatus,
   Param,
-  ParseFilePipe,
-  ParseFilePipeBuilder,
   Patch,
   Post,
-  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -33,8 +29,6 @@ import {
 import { TacticVideosServise } from './tactic_videos.service';
 import {
   FileFieldsInterceptor,
-  FileInterceptor,
-  FilesInterceptor,
 } from '@nestjs/platform-express';
 import { CreateTacticVideosDto } from './dto/create_tactic_video.dto';
 import { UpdateTacticVideosDto } from './dto/update_tactic_video.dto';
@@ -135,11 +129,7 @@ export class TacticVideosController {
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @ApiHeader({
-    name: 'admin_token',
-    description: 'Admin token',
-    required: true,
-  })
+
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'video' }, { name: 'image' }]),
   )
@@ -147,7 +137,6 @@ export class TacticVideosController {
     @UploadedFiles()
     videos: { video?: Express.Multer.File; image?: Express.Multer.File },
     @Body() createTacticVideo: CreateTacticVideosDto,
-    @Headers() header: any,
   ) {
     return await this.#_service.create(
       createTacticVideo,
@@ -206,24 +195,16 @@ export class TacticVideosController {
   @ApiOperation({ summary: 'Attendance Punch In' })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @ApiHeader({
-    name: 'admin_token',
-    description: 'Admin token',
-    required: true,
-  })
+
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'video' }, { name: 'image' }]),
   )
   async update(
     @Param('id') id: string,
-    @Headers() header: any,
     @Body() updateTacticVideos: UpdateTacticVideosDto,
     @UploadedFiles()
     videos: { video?: Express.Multer.File; image?: Express.Multer.File },
   ) {
-    console.log(videos, videos?.video);
-
-    // await this.VerifyToken.verifyAdmin(header);
     await this.#_service.update(
       id,
       updateTacticVideos,
@@ -238,11 +219,6 @@ export class TacticVideosController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiNoContentResponse()
-  @ApiHeader({
-    name: 'autharization',
-    description: 'Admin token',
-    required: true,
-  })
   async remove(@Param('id') id: string): Promise<void> {
     await this.#_service.remove(id);
   }

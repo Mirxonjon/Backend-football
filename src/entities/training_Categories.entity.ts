@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TrainingVideosEntity } from './training_Videos.entity';
+import { TrainingSubCategoriesEntity } from './training_sub_Category';
 
 @Entity()
 export class TrainingCategoriesEntity extends BaseEntity {
@@ -55,6 +56,6 @@ export class TrainingCategoriesEntity extends BaseEntity {
   @CreateDateColumn({ name: 'created_at' })
   create_data: Date;
 
-  @OneToMany(() => TrainingVideosEntity, (videos) => videos.category_id)
-  Training_videos: TrainingVideosEntity[];
+  @OneToMany(() => TrainingSubCategoriesEntity, (sub_category) => sub_category.category_id)
+  Training_sub_category: TrainingSubCategoriesEntity[];
 }

@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   HttpCode,
   HttpStatus,
   Param,
@@ -21,17 +22,17 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { BooksCategoriesService } from './book_categories.service';
-import { CreateBookCategoryDto } from './dto/create-book_category.dto';
-import { UpdateBookCategory } from './dto/update-book_category.dto';
+import { ShortBooksCategoriesService } from './short_book_categories.service';
+import { CreateShortBookCategoryDto } from './dto/create-short_book_category.dto';
+import { UpdateShortBookCategory } from './dto/update-short_book_category.dto';
 import { jwtGuard } from '../auth/guards/jwt.guard';
 
-@Controller('BooksCategories')
-@ApiTags('Books categories')
+@Controller('ShortBooksCategories')
+@ApiTags('Short Books categories')
 @ApiBearerAuth('JWT-auth')
-export class BooksCategoriesController {
-  readonly #_service: BooksCategoriesService;
-  constructor(service: BooksCategoriesService) {
+export class ShortBooksCategoriesController {
+  readonly #_service: ShortBooksCategoriesService;
+  constructor(service: ShortBooksCategoriesService) {
     this.#_service = service;
   }
 
@@ -47,11 +48,7 @@ export class BooksCategoriesController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  @ApiHeader({
-    name: 'autharization',
-    description: 'User token',
-    required: false,
-  })
+ 
   async findOne(@Param('id') id: string) {
     return await this.#_service.findOne(id);
   }
@@ -78,11 +75,11 @@ export class BooksCategoriesController {
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-
   async create(
-    @Body() createBookCategory: CreateBookCategoryDto,
+    @Body() createShortBookCategory: CreateShortBookCategoryDto,
+    @Headers() header: any,
   ) {
-    return await this.#_service.create(createBookCategory);
+    return await this.#_service.create(createShortBookCategory);
   }
 
   @UseGuards(jwtGuard)
@@ -107,9 +104,9 @@ export class BooksCategoriesController {
   @ApiNotFoundResponse()
   async update(
     @Param('id') id: string,
-    @Body() updateBookCategory: UpdateBookCategory,
+    @Body() updateShortBookCategory: UpdateShortBookCategory,
   ) {
-    return await this.#_service.update(id, updateBookCategory);
+    return await this.#_service.update(id, updateShortBookCategory);
   }
 
   @UseGuards(jwtGuard)

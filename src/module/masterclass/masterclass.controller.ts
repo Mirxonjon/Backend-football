@@ -3,7 +3,6 @@ import {
     Controller,
     Delete,
     Get,
-    Headers,
     HttpCode,
     HttpStatus,
     Param,
@@ -19,7 +18,6 @@ import {
     ApiBody,
     ApiConsumes,
     ApiCreatedResponse,
-    ApiHeader,
     ApiNoContentResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
@@ -118,7 +116,6 @@ import {
       @UploadedFiles()
       videos: { title_image?: Express.Multer.File; image?: Express.Multer.File },
       @Body() createTacticVideo: CreateMasterClassDto,
-      @Headers() header: any,
     ) {
       return await this.#_service.create(
         createTacticVideo,
@@ -169,24 +166,18 @@ import {
     @ApiOperation({ summary: 'Attendance Punch In' })
     @ApiBadRequestResponse()
     @ApiNotFoundResponse()
-    @ApiHeader({
-      name: 'admin_token',
-      description: 'Admin token',
-      required: true,
-    })
+
     @UseInterceptors(
       FileFieldsInterceptor([{ name: 'title_image' }, { name: 'image' }]),
     )
     async update(
       @Param('id') id: string,
-      @Headers() header: any,
+
       @Body() updateTacticVideos: UpdateTacticVideosDto,
       @UploadedFiles()
       images: { title_image?: Express.Multer.File; image?: Express.Multer.File },
     ) {
-      // console.log(videos, videos?.title_image);
-  
-      // await this.VerifyToken.verifyAdmin(header);
+    
       await this.#_service.update(
         id,
         updateTacticVideos,
@@ -201,11 +192,6 @@ import {
     @ApiBadRequestResponse()
     @ApiNotFoundResponse()
     @ApiNoContentResponse()
-    @ApiHeader({
-      name: 'autharization',
-      description: 'Admin token',
-      required: true,
-    })
     async remove(@Param('id') id: string): Promise<void> {
       await this.#_service.remove(id);
     }

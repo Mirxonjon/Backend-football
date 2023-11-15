@@ -1,4 +1,4 @@
-import { Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import { Post, Body, HttpCode, HttpStatus, Patch } from '@nestjs/common';
 import { AuthServise } from './auth.service';
 import { Controller } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -69,25 +69,5 @@ export class AuthController {
     return this.service.signIn(body);
   }
 
-  @Post('/signInAdmin')
-  @HttpCode(HttpStatus.FOUND)
-  @ApiBody({
-    schema: {
-      type: 'object',
-      required: ['gmail', 'password'],
-      properties: {
-        gmail: {
-          type: 'string',
-          default: 'Eshmat@gmail.com',
-        },
-        password: {
-          type: 'string',
-          default: '123',
-        },
-      },
-    },
-  })
-  signInAdmin(@Body() body: SingInUserDto) {
-    return this.service.signInAdmin(body);
-  }
+
 }

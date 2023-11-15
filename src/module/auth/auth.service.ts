@@ -7,7 +7,6 @@ import { SingInUserDto } from './dto/sign_in-user.dto';
 @Injectable()
 export class AuthServise {
   constructor(private readonly jwtServise: JwtService) {}
-
   async createUser(createUser: CreateUserDto) {
     const findUser = await UsersEntity.findOne({
       where: {
@@ -68,26 +67,7 @@ export class AuthServise {
     };
   }
 
-  async signInAdmin(signInDto: SingInUserDto) {
-    const finduser = await UsersEntity.findOne({
-      where: {
-        email: signInDto.gmail,
-        password: signInDto.password,
-      },
-    }).catch((e) => {
-      throw new HttpException('Bad Request ', HttpStatus.BAD_REQUEST);
-    });
-    if (!finduser) {
-      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-    }
-    if (finduser.role == 'user') {
-      throw new HttpException('You are not admin', HttpStatus.FOUND);
-    }
-    return {
-      message: 'Successfully sing In',
-      token: this.sign(finduser.id, finduser.role),
-    };
-  }
+
 
   sign(id: string, role: string) {
     return this.jwtServise.sign({ id, role });
@@ -104,7 +84,6 @@ try {
 } catch (error) {
   throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
 
-    // throw new UnauthorizedException();
 }
  
   }
