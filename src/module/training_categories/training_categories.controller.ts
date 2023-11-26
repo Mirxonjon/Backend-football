@@ -65,8 +65,12 @@ export class TrainingCategoriesController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async getfilter(@Query('age') age: string) {
-    return await this.#_service.getfilter(age);
+  async getfilter(
+    @Query('age') age: string,
+    @Query('pageNumber') pageNumber: number,
+    @Query('pageSize') pageSize: number,
+  ) {
+    return await this.#_service.getfilter(age, pageNumber, pageSize);
   }
 
   @Get('/one/:id')

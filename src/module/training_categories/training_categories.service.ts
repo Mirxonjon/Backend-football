@@ -15,16 +15,30 @@ export class TrainingCategoriesService {
   constructor(authService: AuthServise) {
     this.#_authService = authService;
   }
-  async getfilter(age: string) {
-    const allTrainingCategory = await TrainingCategoriesEntity.find({
+  async getfilter(age: string, pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await TrainingCategoriesEntity.findAndCount({
       where: {
         traning_for_age: age,
       },
+      skip: offset,
+      take: pageSize,
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    return allTrainingCategory;
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
   }
 
   async findAll(pageNumber = 1, pageSize = 10) {
