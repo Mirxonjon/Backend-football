@@ -31,9 +31,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ShortBooksServise } from './short_books.service';
-import {
-  FileFieldsInterceptor,
-} from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CreateShortBookDto } from './dto/create_book.dto';
 import { UpdateShortBookDto } from './dto/update_book.dto';
 import { jwtGuard } from '../auth/guards/jwt.guard';
@@ -50,7 +48,6 @@ export class ShortBooksController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-
   async findOne(@Param('id') id: string) {
     return await this.#_service.findOne(id);
   }
@@ -67,10 +64,12 @@ export class ShortBooksController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async findall(@Query('pageNumber') pageNumber: number ,@Query('pageSize') pageSize: number) {
-    return await this.#_service.findAllWithpPage(pageNumber , pageSize);
+  async findall(
+    @Query('pageNumber') pageNumber: number,
+    @Query('pageSize') pageSize: number,
+  ) {
+    return await this.#_service.findAllWithpPage(pageNumber, pageSize);
   }
-
 
   @UseGuards(jwtGuard)
   @Post('create')
@@ -129,7 +128,9 @@ export class ShortBooksController {
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'short_book' }, { name: 'image' }]))
+  @UseInterceptors(
+    FileFieldsInterceptor([{ name: 'short_book' }, { name: 'image' }]),
+  )
   async create(
     @UploadedFiles()
     files: { short_book?: Express.Multer.File; image?: Express.Multer.File },
@@ -189,15 +190,15 @@ export class ShortBooksController {
   @ApiOperation({ summary: 'Attendance Punch In' })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'short_book' }, { name: 'image' }]))
+  @UseInterceptors(
+    FileFieldsInterceptor([{ name: 'short_book' }, { name: 'image' }]),
+  )
   async update(
     @Param('id') id: string,
     @Body() updateBook: UpdateShortBookDto,
     @UploadedFiles()
     file: { short_book?: Express.Multer.File; image?: Express.Multer.File },
   ) {
-
     await this.#_service.update(
       id,
       updateBook,

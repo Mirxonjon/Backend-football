@@ -71,13 +71,16 @@ export class CompetitionCategoriesController {
   async findOne(@Param('id') id: string) {
     return await this.#_service.findOne(id);
   }
-  
+
   @Get('/allWithPage?')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async findall(@Query('pageNumber') pageNumber: number ,@Query('pageSize') pageSize: number) {
-    return await this.#_service.findAll(pageNumber , pageSize);
+  async findall(
+    @Query('pageNumber') pageNumber: number,
+    @Query('pageSize') pageSize: number,
+  ) {
+    return await this.#_service.findAll(pageNumber, pageSize);
   }
 
   @UseGuards(jwtGuard)
@@ -156,7 +159,6 @@ export class CompetitionCategoriesController {
     @Body() updateTacticCategory: UpdateCompetitionCategory,
     @UploadedFile() image: Express.Multer.File,
   ) {
-
     return await this.#_service.update(id, updateTacticCategory, image);
   }
 
@@ -166,7 +168,6 @@ export class CompetitionCategoriesController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiNoContentResponse()
-
   async remove(@Param('id') id: string): Promise<void> {
     return await this.#_service.remove(id);
   }

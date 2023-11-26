@@ -8,8 +8,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UsersEntity } from 'src/entities/users.entity';
 import { CustomRequest } from 'src/types';
 
-
-
 export class jwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
@@ -23,11 +21,11 @@ export class jwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(req: CustomRequest, payload: any) {
     console.log(payload);
-    
+
     const findAdmin = await UsersEntity.findOne({
       where: {
         id: payload.id,
-        role: 'admin' ,
+        role: 'admin',
       },
     });
     console.log(findAdmin);

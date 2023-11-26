@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import {  CreateShortBookDto } from './dto/create_book.dto';
+import { CreateShortBookDto } from './dto/create_book.dto';
 import { TrainingCategoriesEntity } from 'src/entities/training_Categories.entity';
 import { extname } from 'path';
 import { deleteFileCloud, googleCloud } from 'src/utils/google_cloud';
 import { TrainingVideosEntity } from 'src/entities/training_Videos.entity';
-import {  UpdateShortBookDto } from './dto/update_book.dto';
+import { UpdateShortBookDto } from './dto/update_book.dto';
 import {
   allowedBookFormats,
   allowedImageFormats,
@@ -17,27 +17,25 @@ import { ShortBooksEntity } from 'src/entities/short_books.entity';
 @Injectable()
 export class ShortBooksServise {
   async findOne(id: string) {
-
     const findBook = await ShortBooksEntity.findOneBy({ id });
 
     if (!findBook) {
       throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
     }
 
-    return findBook
+    return findBook;
   }
 
-  
   async findAllWithpPage(pageNumber = 1, pageSize = 10) {
     const offset = (pageNumber - 1) * pageSize;
-  
+
     const [results, total] = await ShortBooksEntity.findAndCount({
       skip: offset,
       take: pageSize,
     });
-  
+
     const totalPages = Math.ceil(total / pageSize);
-  
+
     return {
       results,
       pagination: {
@@ -50,14 +48,13 @@ export class ShortBooksServise {
   }
 
   async findAll() {
-
     const findBooks = await ShortBooksEntity.find();
 
     if (!findBooks) {
       throw new HttpException('Books not found', HttpStatus.NOT_FOUND);
     }
 
-    return findBooks
+    return findBooks;
   }
 
   async create(
@@ -78,7 +75,6 @@ export class ShortBooksServise {
       );
     }
 
-
     const findCategory = await ShortBookCategoriesEntity.findOne({
       where: {
         id: body.category_id,
@@ -88,10 +84,7 @@ export class ShortBooksServise {
     });
 
     if (!findCategory) {
-      throw new HttpException(
-        'Category not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
     }
 
     const formatImage = extname(Bookimage?.originalname).toLowerCase();
@@ -185,9 +178,9 @@ export class ShortBooksServise {
           description_book: body.description_book || findBook.description_book,
           description_book_ru:
             body.description_book_ru || findBook.description_book_ru,
-            short_book_lang: body.short_book_lang || findBook.short_book_lang,
-            short_book_img :book_img,
-          short_book_link :book_link,
+          short_book_lang: body.short_book_lang || findBook.short_book_lang,
+          short_book_img: book_img,
+          short_book_link: book_link,
           category_id: body.category_id || (findBook.category_id.id as any),
         });
 

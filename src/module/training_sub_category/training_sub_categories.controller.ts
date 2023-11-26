@@ -55,7 +55,6 @@ export class TrainingSubCategoriesController {
   //   return await this.#_service.getfilter(age);
   // }
 
-  
   @Get('/one/:id')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -65,7 +64,7 @@ export class TrainingSubCategoriesController {
     description: 'UserToken token',
     required: false,
   })
-  async findOne( @Param('id') id: string ,  @Headers() headers: CustomHeaders) {
+  async findOne(@Param('id') id: string, @Headers() headers: CustomHeaders) {
     return await this.#_service.findOne(id, headers);
   }
 
@@ -74,8 +73,8 @@ export class TrainingSubCategoriesController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async findOneFilter( @Param('id') id: string ) {
-     return await this.#_service.findOneFilter(id);
+  async findOneFilter(@Param('id') id: string) {
+    return await this.#_service.findOneFilter(id);
   }
 
   @Get('/filter/uz?')
@@ -100,11 +99,7 @@ export class TrainingSubCategoriesController {
   @ApiBody({
     schema: {
       type: 'object',
-      required: [
-        'category_id',
-        'title',
-        'title_ru',
-      ],
+      required: ['category_id', 'title', 'title_ru'],
       properties: {
         category_id: {
           type: 'string',

@@ -1,4 +1,10 @@
-import { Get, HttpException, HttpStatus, Injectable, Query } from '@nestjs/common';
+import {
+  Get,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Query,
+} from '@nestjs/common';
 import { CreateBookDto } from './dto/create_book.dto';
 import { extname } from 'path';
 import { deleteFileCloud, googleCloud } from 'src/utils/google_cloud';
@@ -14,10 +20,9 @@ import { Like } from 'typeorm';
 
 @Injectable()
 export class BooksServise {
-
   async findAll(pageNumber = 1, pageSize = 10) {
     const offset = (pageNumber - 1) * pageSize;
-  
+
     const [results, total] = await BooksEntity.findAndCount({
       relations: {
         category_id: true,
@@ -25,9 +30,9 @@ export class BooksServise {
       skip: offset,
       take: pageSize,
     });
-  
+
     const totalPages = Math.ceil(total / pageSize);
-  
+
     return {
       results,
       pagination: {
@@ -38,8 +43,6 @@ export class BooksServise {
       },
     };
   }
-  
-
 
   async findOne(id: string, header: any) {
     const user_id = false;
@@ -62,11 +65,11 @@ export class BooksServise {
   async getfilterUz(title: string) {
     const filterBookCategory = await BooksEntity.find({
       where: {
-        title: Like(`%${title}%`)
+        title: Like(`%${title}%`),
       },
-      relations : {
-        category_id :true
-      }
+      relations: {
+        category_id: true,
+      },
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
@@ -74,22 +77,20 @@ export class BooksServise {
     return filterBookCategory;
   }
 
-  
   async getfilterRu(title: string) {
     const filterBookCategory = await BooksEntity.find({
       where: {
-        title_ru: Like(`%${title}%`)
+        title_ru: Like(`%${title}%`),
       },
-      relations : {
-        category_id :true
-      }
+      relations: {
+        category_id: true,
+      },
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
     return filterBookCategory;
   }
-
 
   async create(
     body: CreateBookDto,
@@ -126,8 +127,6 @@ export class BooksServise {
     }
 
     const formatImage = extname(Bookimage?.originalname).toLowerCase();
-
-
 
     const formatBook = extname(book?.originalname).toLowerCase();
 

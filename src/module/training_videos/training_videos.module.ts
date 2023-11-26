@@ -5,8 +5,8 @@ import { AuthModule } from '../auth/auth.module';
 import { AuthServise } from '../auth/auth.service';
 
 @Module({
-  imports:[],
+  imports: [],
   controllers: [TrainingVideosController],
-  providers: [TrainingVideosServise , AuthServise],
+  providers: [TrainingVideosServise, AuthServise],
 })
 export class TrainingVideosModule {}

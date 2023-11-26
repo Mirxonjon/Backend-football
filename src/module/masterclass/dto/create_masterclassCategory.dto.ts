@@ -1,7 +1,6 @@
-import { IsString, IsNotEmpty, MaxLength  } from 'class-validator';
+import { IsString, IsNotEmpty, MaxLength } from 'class-validator';
 
 export class CreateMasterClassCategoryDto {
-
   @IsString()
   @IsNotEmpty()
   @MaxLength(200)
@@ -11,7 +10,6 @@ export class CreateMasterClassCategoryDto {
   @IsNotEmpty()
   @MaxLength(200)
   title_ru: string;
-
 
   @IsString()
   @IsNotEmpty()

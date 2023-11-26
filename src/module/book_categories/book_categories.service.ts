@@ -5,7 +5,6 @@ import { BooksCategoriesEntity } from 'src/entities/books_Categories.entity';
 import { Like } from 'typeorm';
 @Injectable()
 export class BooksCategoriesService {
-
   async getall() {
     const allBookCategory = await BooksCategoriesEntity.find().catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -16,15 +15,15 @@ export class BooksCategoriesService {
 
   // async findAllWithPage(pageNumber = 1, pageSize = 10) {
   //   const offset = (pageNumber - 1) * pageSize;
-  
+
   //   const [results, total] = await BooksCategoriesEntity.findAndCount({
-      
+
   //     skip: offset,
   //     take: pageSize,
   //   });
-  
+
   //   const totalPages = Math.ceil(total / pageSize);
-  
+
   //   return {
   //     results,
   //     pagination: {
@@ -35,7 +34,6 @@ export class BooksCategoriesService {
   //     },
   //   };
   // }
-  
 
   async findOne(id: string) {
     const findCategory: BooksCategoriesEntity =
@@ -48,21 +46,17 @@ export class BooksCategoriesService {
         },
       });
 
-      if (!findCategory) {
-        throw new HttpException(
-          'Not found',
-          HttpStatus.NOT_FOUND,
-        );
-      }
+    if (!findCategory) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
     return findCategory;
   }
 
   async getfilterUz(title: string) {
     const filterTacticCategory = await BooksCategoriesEntity.find({
       where: {
-        title: Like(`%${title}%`)
+        title: Like(`%${title}%`),
       },
-  
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
@@ -70,19 +64,17 @@ export class BooksCategoriesService {
     return filterTacticCategory;
   }
 
-  
   async getfilterRu(title: string) {
     const filterTacticCategory = await BooksCategoriesEntity.find({
       where: {
-        title_ru: Like(`%${title}%`)
+        title_ru: Like(`%${title}%`),
       },
-    
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
     return filterTacticCategory;
-  } 
+  }
 
   async create(body: CreateBookCategoryDto) {
     const findCategory = await BooksCategoriesEntity.findOneBy({

@@ -1,7 +1,6 @@
-import { IsString, IsNotEmpty, MaxLength  } from 'class-validator';
+import { IsString, IsNotEmpty, MaxLength } from 'class-validator';
 
 export class CreateMasterClassVideoDto {
-
   @IsString()
   @IsNotEmpty()
   category_id: string;
@@ -32,5 +31,4 @@ export class CreateMasterClassVideoDto {
   @IsString()
   @IsNotEmpty()
   description_tactic_ru: string;
-
 }

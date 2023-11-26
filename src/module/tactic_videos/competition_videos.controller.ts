@@ -25,7 +25,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import {  CompetitionVideosServise } from './competition_videos.service';
+import { CompetitionVideosServise } from './competition_videos.service';
 
 import { CreateCompetitionVideosDto } from './dto/create_competition_video.dto';
 import { UpdateCompetitionVideosDto } from './dto/update_competition_video.dto';
@@ -33,7 +33,7 @@ import { jwtGuard } from '../auth/guards/jwt.guard';
 @Controller('competitionVideos')
 @ApiTags('Competition Videos')
 @ApiBearerAuth('JWT-auth')
-export class  CompetitionVideosController {
+export class CompetitionVideosController {
   readonly #_service: CompetitionVideosServise;
   constructor(service: CompetitionVideosServise) {
     this.#_service = service;
@@ -58,8 +58,11 @@ export class  CompetitionVideosController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async findall(@Query('pageNumber') pageNumber: number ,@Query('pageSize') pageSize: number) {
-    return await this.#_service.findAll(pageNumber , pageSize);
+  async findall(
+    @Query('pageNumber') pageNumber: number,
+    @Query('pageSize') pageSize: number,
+  ) {
+    return await this.#_service.findAll(pageNumber, pageSize);
   }
 
   @UseGuards(jwtGuard)
@@ -110,10 +113,7 @@ export class  CompetitionVideosController {
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  
-  async create(
-    @Body() createTacticVideo: CreateCompetitionVideosDto,
-  ) {
+  async create(@Body() createTacticVideo: CreateCompetitionVideosDto) {
     return await this.#_service.create(createTacticVideo);
   }
 
@@ -155,16 +155,11 @@ export class  CompetitionVideosController {
   @ApiOperation({ summary: 'Attendance Punch In' })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-
   async update(
     @Param('id') id: string,
     @Body() updateTacticVideos: UpdateCompetitionVideosDto,
-  
   ) {
-    await this.#_service.update(
-      id,
-      updateTacticVideos
-    );
+    await this.#_service.update(id, updateTacticVideos);
   }
 
   @UseGuards(jwtGuard)

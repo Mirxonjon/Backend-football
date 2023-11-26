@@ -28,9 +28,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { TrainingVideosServise } from './training_videos.service';
-import {
-  FileFieldsInterceptor,
-} from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CreateTrainingVideosDto } from './dto/create_training_video.dto';
 import { UpdateTrainingVideosDto } from './dto/update_training_video.dto';
 import { jwtGuard } from '../auth/guards/jwt.guard';
@@ -40,10 +38,9 @@ import { CustomHeaders } from 'src/types';
 @ApiBearerAuth('JWT-auth')
 export class TrainingVideosController {
   readonly #_service: TrainingVideosServise;
-  constructor(service: TrainingVideosServise ) {
+  constructor(service: TrainingVideosServise) {
     this.#_service = service;
   }
-
 
   // @Get('/allbyCourse/:categoryid')
   // @ApiBadRequestResponse()
@@ -58,9 +55,6 @@ export class TrainingVideosController {
   //   return await this.#_service.getall(id, header);
   // }
 
-
-
-
   @Get('/one/:id')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -71,7 +65,6 @@ export class TrainingVideosController {
     required: false,
   })
   async findOne(@Param('id') id: string, @Headers() header: CustomHeaders) {
-    
     return await this.#_service.findOne(id, header);
   }
 
@@ -93,7 +86,6 @@ export class TrainingVideosController {
     return await this.#_service.findAll();
   }
 
-  
   @Get('/filter/uz?')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -109,7 +101,6 @@ export class TrainingVideosController {
   async getfilterRu(@Query('title') title: string) {
     return await this.#_service.getfilterRu(title);
   }
-
 
   @UseGuards(jwtGuard)
   @Post('create')
@@ -247,7 +238,6 @@ export class TrainingVideosController {
     @UploadedFiles()
     videos: { video?: Express.Multer.File; image?: Express.Multer.File },
   ) {
-
     await this.#_service.update(
       id,
       updateTrainingVideos,
@@ -262,7 +252,6 @@ export class TrainingVideosController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiNoContentResponse()
-
   async remove(@Param('id') id: string): Promise<void> {
     await this.#_service.remove(id);
   }

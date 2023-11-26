@@ -1,7 +1,6 @@
 import { IsString, MaxLength } from 'class-validator';
 
 export class UpdateMasterclassVideoDto {
-
   @IsString()
   category_id: string;
 
@@ -25,5 +24,4 @@ export class UpdateMasterclassVideoDto {
 
   @IsString()
   description_tactic_ru: string;
-  
 }

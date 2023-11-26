@@ -68,6 +68,4 @@ export class AuthController {
   signIn(@Body() body: SingInUserDto) {
     return this.service.signIn(body);
   }
-
-
 }

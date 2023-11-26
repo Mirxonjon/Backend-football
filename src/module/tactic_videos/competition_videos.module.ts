@@ -6,4 +6,4 @@ import { CompetitionVideosServise } from './competition_videos.service';
   controllers: [CompetitionVideosController],
   providers: [CompetitionVideosServise],
 })
-export class  CompetitionVideosModule {}
+export class CompetitionVideosModule {}

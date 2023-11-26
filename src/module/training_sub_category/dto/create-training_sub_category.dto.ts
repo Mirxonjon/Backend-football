@@ -4,7 +4,7 @@ export class CreateTrainingSubCategoryDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(200)
-  category_id : string
+  category_id: string;
 
   @IsString()
   @IsNotEmpty()
@@ -15,5 +15,4 @@ export class CreateTrainingSubCategoryDto {
   @IsNotEmpty()
   @MaxLength(200)
   title_ru: string;
-
 }

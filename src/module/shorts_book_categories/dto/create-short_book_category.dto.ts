@@ -10,5 +10,4 @@ export class CreateShortBookCategoryDto {
   @IsNotEmpty()
   @MaxLength(200)
   title_ru: string;
-
 }

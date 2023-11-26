@@ -26,9 +26,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UsersServise } from './users.service';
-import {
-  FileFieldsInterceptor,
-} from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDto } from './dto/update_book.dto';
 import { jwtGuard } from '../auth/guards/jwt.guard';
 import { AddAdminDto } from './dto/add-admin.dto';
@@ -54,7 +52,6 @@ export class UsersController {
     return await this.#_service.findOne(header);
   }
 
-
   @UseGuards(jwtGuard)
   @Get('/all')
   @ApiBadRequestResponse()
@@ -63,7 +60,6 @@ export class UsersController {
   async findAll() {
     return await this.#_service.findAll();
   }
-
 
   @Patch('/UpdateAdmin')
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -86,9 +82,6 @@ export class UsersController {
   addAdmin(@Body() body: AddAdminDto) {
     return this.#_service.AddAdmin(body);
   }
-
-
-
 
   @UseGuards(jwtGuard)
   @Patch('/update/:id')
@@ -132,7 +125,6 @@ export class UsersController {
   @ApiOperation({ summary: 'Attendance Punch In' })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-
   @UseInterceptors(FileFieldsInterceptor([{ name: 'image' }]))
   async update(
     @Param('id') id: string,
@@ -143,7 +135,7 @@ export class UsersController {
     await this.#_service.update(
       id,
       updateUserDto,
-      file?.image ? file?.image[0] : null
+      file?.image ? file?.image[0] : null,
     );
   }
 

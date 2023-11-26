@@ -1,14 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import {  CreateShortBookCategoryDto } from './dto/create-short_book_category.dto';
-import {  UpdateShortBookCategory } from './dto/update-short_book_category.dto';
+import { CreateShortBookCategoryDto } from './dto/create-short_book_category.dto';
+import { UpdateShortBookCategory } from './dto/update-short_book_category.dto';
 import { ShortBookCategoriesEntity } from 'src/entities/short_book_Categories.entity';
 @Injectable()
 export class ShortBooksCategoriesService {
-
   async getall() {
-    const allShortBookCategory = await ShortBookCategoriesEntity.find().catch((e) => {
-      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-    });
+    const allShortBookCategory = await ShortBookCategoriesEntity.find().catch(
+      (e) => {
+        throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+      },
+    );
 
     return allShortBookCategory;
   }
@@ -24,12 +25,9 @@ export class ShortBooksCategoriesService {
         },
       });
 
-      if (!findCategory) {
-        throw new HttpException(
-          'Not found',
-          HttpStatus.NOT_FOUND,
-        );
-      }
+    if (!findCategory) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
 
     return findCategory;
   }
@@ -54,10 +52,7 @@ export class ShortBooksCategoriesService {
       })
       .execute()
       .catch(() => {
-        throw new HttpException(
-          'Bad Request ',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException('Bad Request ', HttpStatus.BAD_REQUEST);
       });
   }
 

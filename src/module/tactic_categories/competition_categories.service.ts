@@ -9,11 +9,10 @@ import { Like } from 'typeorm';
 // import soapRequest from 'easy-soap-request'
 @Injectable()
 export class CompetitionCategoriesService {
-
   async getfilterUz(title: string) {
     const filterTacticCategory = await CompetitionCategoriesEntity.find({
       where: {
-        title: Like(`%${title}%`)
+        title: Like(`%${title}%`),
       },
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -22,11 +21,10 @@ export class CompetitionCategoriesService {
     return filterTacticCategory;
   }
 
-  
   async getfilterRu(title: string) {
     const filterTacticCategory = await CompetitionCategoriesEntity.find({
       where: {
-        title_ru: Like(`%${title}%`)
+        title_ru: Like(`%${title}%`),
       },
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -37,9 +35,9 @@ export class CompetitionCategoriesService {
 
   async getall() {
     const allTacticCategory = await CompetitionCategoriesEntity.find({
-      order:{
-        create_data : 'desc'
-      }
+      order: {
+        create_data: 'desc',
+      },
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
@@ -48,31 +46,29 @@ export class CompetitionCategoriesService {
   }
 
   async findOne(id: string) {
-
     const findCategory: CompetitionCategoriesEntity =
       await CompetitionCategoriesEntity.findOne({
-        where : {
-          id: id
+        where: {
+          id: id,
         },
         relations: {
-          Tactic_videos :true
+          Tactic_videos: true,
         },
       });
 
-      return findCategory
-
+    return findCategory;
   }
 
   async findAll(pageNumber = 1, pageSize = 10) {
     const offset = (pageNumber - 1) * pageSize;
-  
+
     const [results, total] = await CompetitionCategoriesEntity.findAndCount({
       skip: offset,
       take: pageSize,
     });
-  
+
     const totalPages = Math.ceil(total / pageSize);
-  
+
     return {
       results,
       pagination: {

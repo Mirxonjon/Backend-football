@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersEntity } from 'src/entities/users.entity';
@@ -67,24 +72,21 @@ export class AuthServise {
     };
   }
 
-
-
   sign(id: string, role: string) {
     return this.jwtServise.sign({ id, role });
   }
 
   async verify(token: string) {
-try {
- 
-  const  verifytoken = await this.jwtServise.verifyAsync(token).catch(e => {
-    // throw new UnauthorizedException(e);
-    throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
-  }) 
-  return verifytoken
-} catch (error) {
-  throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-
-}
- 
+    try {
+      const verifytoken = await this.jwtServise
+        .verifyAsync(token)
+        .catch((e) => {
+          // throw new UnauthorizedException(e);
+          throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+        });
+      return verifytoken;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }

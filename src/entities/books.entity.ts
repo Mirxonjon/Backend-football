@@ -61,7 +61,7 @@ export class BooksEntity extends BaseEntity {
   book_lang: string;
   @CreateDateColumn({ name: 'created_at' })
   create_data: Date;
-  
+
   @ManyToOne(() => BooksCategoriesEntity, (categories) => categories.books, {
     onDelete: 'CASCADE',
   })

@@ -52,7 +52,6 @@ export class BooksCategoriesController {
   //   return await this.#_service.findAllWithPage(pageNumber , pageSize);
   // }
 
-
   @Get('/one/:id')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -66,7 +65,6 @@ export class BooksCategoriesController {
     return await this.#_service.findOne(id);
   }
 
-    
   @Get('/filter/uz?')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -82,8 +80,6 @@ export class BooksCategoriesController {
   async getfilterRu(@Query('title') title: string) {
     return await this.#_service.getfilterRu(title);
   }
-
-
 
   @UseGuards(jwtGuard)
   @Post('create')
@@ -107,10 +103,7 @@ export class BooksCategoriesController {
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-
-  async create(
-    @Body() createBookCategory: CreateBookCategoryDto,
-  ) {
+  async create(@Body() createBookCategory: CreateBookCategoryDto) {
     return await this.#_service.create(createBookCategory);
   }
 

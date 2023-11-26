@@ -3,7 +3,7 @@ import { IsString, MaxLength } from 'class-validator';
 export class UpdateTrainingSubCategory {
   @IsString()
   @MaxLength(200)
-  category_id : string
+  category_id: string;
 
   @IsString()
   @MaxLength(200)

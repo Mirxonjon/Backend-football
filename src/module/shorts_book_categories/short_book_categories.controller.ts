@@ -48,7 +48,6 @@ export class ShortBooksCategoriesController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
- 
   async findOne(@Param('id') id: string) {
     return await this.#_service.findOne(id);
   }

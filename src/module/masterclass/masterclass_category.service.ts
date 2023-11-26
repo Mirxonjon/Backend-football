@@ -20,46 +20,42 @@ export class MasterClassCategoryServise {
   async getall() {
     const findAllMasterClasses = await MasterclassCategoryEntity.find({
       order: {
-        create_data : 'desc'
-      }
-    })
+        create_data: 'desc',
+      },
+    });
 
-    return findAllMasterClasses
+    return findAllMasterClasses;
   }
-
-
-
 
   async findOne(id: string) {
     const findMasterClasses = await MasterclassCategoryEntity.find({
-      where : {
-        id: id
+      where: {
+        id: id,
       },
       order: {
-        create_data : 'desc'
+        create_data: 'desc',
       },
-      relations :{
-        MasterclassVideos : true
-      }
-    })
+      relations: {
+        MasterclassVideos: true,
+      },
+    });
 
-    return findMasterClasses
+    return findMasterClasses;
   }
 
-  
   async findAll(pageNumber = 1, pageSize = 10) {
     const offset = (pageNumber - 1) * pageSize;
-  
+
     const [results, total] = await MasterclassCategoryEntity.findAndCount({
       order: {
-        create_data : 'desc'
+        create_data: 'desc',
       },
       skip: offset,
       take: pageSize,
     });
-  
+
     const totalPages = Math.ceil(total / pageSize);
-  
+
     return {
       results,
       pagination: {
@@ -74,11 +70,11 @@ export class MasterClassCategoryServise {
   async getfilterUz(title: string) {
     const filterCategory = await MasterclassCategoryEntity.find({
       where: {
-        title: Like(`%${title}%`)
+        title: Like(`%${title}%`),
       },
-      relations : {
-        MasterclassVideos :true
-      }
+      relations: {
+        MasterclassVideos: true,
+      },
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
@@ -86,14 +82,13 @@ export class MasterClassCategoryServise {
     return filterCategory;
   }
 
-  
   async getfilterRu(title: string) {
     const filterCategory = await MasterclassCategoryEntity.find({
       where: {
-        title_ru: Like(`%${title}%`)
+        title_ru: Like(`%${title}%`),
       },
-      relations :{
-        MasterclassVideos: true
+      relations: {
+        MasterclassVideos: true,
       },
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -102,10 +97,7 @@ export class MasterClassCategoryServise {
     return filterCategory;
   }
 
-  async create(
-    body: CreateMasterClassCategoryDto,
-    image: Express.Multer.File,
-  ) {
+  async create(body: CreateMasterClassCategoryDto, image: Express.Multer.File) {
     if (!image) {
       throw new HttpException(
         'image should not be empty',
@@ -115,23 +107,22 @@ export class MasterClassCategoryServise {
 
     const formatImage = extname(image?.originalname).toLowerCase();
     if (allowedImageFormats.includes(formatImage)) {
-        const linkImage = googleCloud(image);
+      const linkImage = googleCloud(image);
 
-        await MasterclassCategoryEntity.createQueryBuilder()
-          .insert()
-          .into(MasterclassCategoryEntity)
-          .values({
-            title: body.title,
-            title_ru: body.title_ru,
-            title_descrioption: body.title_descrioption,
-            title_descrioption_ru: body.title_descrioption_ru,
-            img_link: linkImage,
-
-          })
-          .execute()
-          .catch(() => {
-            throw new HttpException('Bad Request ', HttpStatus.BAD_REQUEST);
-          });
+      await MasterclassCategoryEntity.createQueryBuilder()
+        .insert()
+        .into(MasterclassCategoryEntity)
+        .values({
+          title: body.title,
+          title_ru: body.title_ru,
+          title_descrioption: body.title_descrioption,
+          title_descrioption_ru: body.title_descrioption_ru,
+          img_link: linkImage,
+        })
+        .execute()
+        .catch(() => {
+          throw new HttpException('Bad Request ', HttpStatus.BAD_REQUEST);
+        });
     } else {
       throw new HttpException(
         'Image should  be format jpg , png , jpeg , pnmj , svg',
@@ -163,25 +154,23 @@ export class MasterClassCategoryServise {
       allowedImageFormats.includes(formatImage) ||
       formatImage === 'Not image'
     ) {
-        let img_link =  findMasterClass.img_link;
-        console.log(img_link);
-        
-        
+      let img_link = findMasterClass.img_link;
+      console.log(img_link);
 
-        if (formatImage !== 'Not image') {
-          await deleteFileCloud(img_link);
-          img_link = googleCloud(image);
-        }
+      if (formatImage !== 'Not image') {
+        await deleteFileCloud(img_link);
+        img_link = googleCloud(image);
+      }
 
-         await MasterclassCategoryEntity.update(id, {
-          title: body.title || findMasterClass.title,
-          title_ru: body.title_ru || findMasterClass.title_ru,
-          title_descrioption: body.title_descrioption || findMasterClass.title_descrioption,
-          title_descrioption_ru: body.title_descrioption_ru || findMasterClass.title_descrioption_ru,
-          img_link: img_link
-    
-        });
-
+      await MasterclassCategoryEntity.update(id, {
+        title: body.title || findMasterClass.title,
+        title_ru: body.title_ru || findMasterClass.title_ru,
+        title_descrioption:
+          body.title_descrioption || findMasterClass.title_descrioption,
+        title_descrioption_ru:
+          body.title_descrioption_ru || findMasterClass.title_descrioption_ru,
+        img_link: img_link,
+      });
     } else {
       throw new HttpException(
         'Image should be in the format jpg, png, jpeg, pnmj, svg',
@@ -191,7 +180,9 @@ export class MasterClassCategoryServise {
   }
 
   async remove(id: string) {
-    const findMasterClass = await MasterclassCategoryEntity.findOneBy({ id }).catch(() => {
+    const findMasterClass = await MasterclassCategoryEntity.findOneBy({
+      id,
+    }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 

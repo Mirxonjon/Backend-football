@@ -39,7 +39,7 @@ export const connectDb: TypeOrmModuleOptions = {
     MasterclassCategoryEntity,
     MasterclassVideosEntity,
     ShortBookCategoriesEntity,
-    ShortBooksEntity
+    ShortBooksEntity,
   ],
   autoLoadEntities: true,
   synchronize: true,

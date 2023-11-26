@@ -47,7 +47,6 @@ export class TrainingVideosEntity extends BaseEntity {
     nullable: false,
   })
   sequence: number;
-  
 
   @Column({
     type: 'character varying',

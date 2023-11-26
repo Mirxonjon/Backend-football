@@ -42,9 +42,7 @@ export class TrainingCategoriesController {
     this.#_service = service;
   }
 
-  
-
-  @Get('/all') 
+  @Get('/all')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
@@ -56,8 +54,11 @@ export class TrainingCategoriesController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async findall(@Query('pageNumber') pageNumber: number ,@Query('pageSize') pageSize: number) {
-    return await this.#_service.findAll(pageNumber , pageSize);
+  async findall(
+    @Query('pageNumber') pageNumber: number,
+    @Query('pageSize') pageSize: number,
+  ) {
+    return await this.#_service.findAll(pageNumber, pageSize);
   }
 
   @Get('/filter?')
@@ -72,9 +73,8 @@ export class TrainingCategoriesController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-
-  async findOne( @Param('id') id: string ,  ) {
-     return await this.#_service.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.#_service.findOne(id);
   }
 
   @Get('/filter/uz?')

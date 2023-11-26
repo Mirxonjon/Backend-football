@@ -5,15 +5,15 @@ import { TrainingCategoriesEntity } from 'src/entities/training_Categories.entit
 import { UpdateTrainingCategory } from './dto/update-training_category.dto';
 import { deleteFileCloud, googleCloud } from 'src/utils/google_cloud';
 import { extname } from 'path';
-import { CustomHeaders, } from 'src/types';
+import { CustomHeaders } from 'src/types';
 import { Like } from 'typeorm';
 
 // import soapRequest from 'easy-soap-request'
 @Injectable()
 export class TrainingCategoriesService {
-  readonly #_authService : AuthServise
-  constructor(authService : AuthServise) {
-    this.#_authService = authService
+  readonly #_authService: AuthServise;
+  constructor(authService: AuthServise) {
+    this.#_authService = authService;
   }
   async getfilter(age: string) {
     const allTrainingCategory = await TrainingCategoriesEntity.find({
@@ -29,14 +29,14 @@ export class TrainingCategoriesService {
 
   async findAll(pageNumber = 1, pageSize = 10) {
     const offset = (pageNumber - 1) * pageSize;
-  
+
     const [results, total] = await TrainingCategoriesEntity.findAndCount({
       skip: offset,
       take: pageSize,
     });
-  
+
     const totalPages = Math.ceil(total / pageSize);
-  
+
     return {
       results,
       pagination: {
@@ -47,7 +47,6 @@ export class TrainingCategoriesService {
       },
     };
   }
-  
 
   async getall() {
     const allTrainingCategory = await TrainingCategoriesEntity.find().catch(
@@ -60,72 +59,68 @@ export class TrainingCategoriesService {
   }
 
   async findOne(id: string) {
-
-    const findCategory: any =
-      await TrainingCategoriesEntity.findOne({
-        where: {
-          id: id,
+    const findCategory: any = await TrainingCategoriesEntity.findOne({
+      where: {
+        id: id,
+      },
+      relations: {
+        Training_sub_category: true,
+      },
+      order: {
+        Training_sub_category: {
+          create_data: 'desc',
         },
-        relations: {
-          Training_sub_category:  true
-        },
-        order : {
-          Training_sub_category: {
-            create_data :'desc'
-          }
-        },
- 
-      });
-      return findCategory
-      // let allCourseVideos= [...findCategory.Training_videos]
-      
-      // if(header.access_token){
+      },
+    });
+    return findCategory;
+    // let allCourseVideos= [...findCategory.Training_videos]
 
-      //   const user  = await this.#_authService.verify(header.access_token)
-        
-      //   if (user.id && TrainingCategoriesEntity) {
-      //     for (let i : number = 0; i < allCourseVideos.length; i++) {
-      //         allCourseVideos[i].active = true
-      //         allCourseVideos[i].link = allCourseVideos[i].video_link
-      //     }
-      //     return findCategory;
-      //   } else {
-      //     for (let i : number = 0; i < allCourseVideos.length; i++) {
-      //       if(i => 2) {
-      //         allCourseVideos[i].active = false
-      //         allCourseVideos[i].video_link.split()
-      //         allCourseVideos[i].link = allCourseVideos[i].video_link
-      //           .split('')
-      //           .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
-      //           .join('');
-      //       } else {
-      //         allCourseVideos[i].active = true
-      //         allCourseVideos[i].link = allCourseVideos[i].video_link
-      //       }
-      //     }
-      //     findCategory.Training_videos = allCourseVideos
-      //     return findCategory
-      //   }
-      //   // return findCategory;
-      // } else {
-      //   for (let i : number = 0; i < allCourseVideos.length; i++) {
-      //     if(i => 2) {
-      //       allCourseVideos[i].active = false
-      //       allCourseVideos[i].video_link.split()
-      //       allCourseVideos[i].link = allCourseVideos[i].video_link
-      //         .split('')
-      //         .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
-      //         .join('');
-      //     } else {
-      //       allCourseVideos[i].active = true
-      //       allCourseVideos[i].link = allCourseVideos[i].video_link
-      //     }
-      //   }
-      //   findCategory.Training_videos = allCourseVideos
-      //   return findCategory
-      // }
-      }
+    // if(header.access_token){
 
+    //   const user  = await this.#_authService.verify(header.access_token)
+
+    //   if (user.id && TrainingCategoriesEntity) {
+    //     for (let i : number = 0; i < allCourseVideos.length; i++) {
+    //         allCourseVideos[i].active = true
+    //         allCourseVideos[i].link = allCourseVideos[i].video_link
+    //     }
+    //     return findCategory;
+    //   } else {
+    //     for (let i : number = 0; i < allCourseVideos.length; i++) {
+    //       if(i => 2) {
+    //         allCourseVideos[i].active = false
+    //         allCourseVideos[i].video_link.split()
+    //         allCourseVideos[i].link = allCourseVideos[i].video_link
+    //           .split('')
+    //           .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
+    //           .join('');
+    //       } else {
+    //         allCourseVideos[i].active = true
+    //         allCourseVideos[i].link = allCourseVideos[i].video_link
+    //       }
+    //     }
+    //     findCategory.Training_videos = allCourseVideos
+    //     return findCategory
+    //   }
+    //   // return findCategory;
+    // } else {
+    //   for (let i : number = 0; i < allCourseVideos.length; i++) {
+    //     if(i => 2) {
+    //       allCourseVideos[i].active = false
+    //       allCourseVideos[i].video_link.split()
+    //       allCourseVideos[i].link = allCourseVideos[i].video_link
+    //         .split('')
+    //         .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
+    //         .join('');
+    //     } else {
+    //       allCourseVideos[i].active = true
+    //       allCourseVideos[i].link = allCourseVideos[i].video_link
+    //     }
+    //   }
+    //   findCategory.Training_videos = allCourseVideos
+    //   return findCategory
+    // }
+  }
 
   async create(body: CreateTrainingCategoryDto, image: Express.Multer.File) {
     if (!image) {
@@ -184,7 +179,7 @@ export class TrainingCategoriesService {
   async getfilterUz(title: string) {
     const filterTacticCategory = await TrainingCategoriesEntity.find({
       where: {
-        title: Like(`%${title}%`)
+        title: Like(`%${title}%`),
       },
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -193,11 +188,10 @@ export class TrainingCategoriesService {
     return filterTacticCategory;
   }
 
-  
   async getfilterRu(title: string) {
     const filterTacticCategory = await TrainingCategoriesEntity.find({
       where: {
-        title_ru: Like(`%${title}%`)
+        title_ru: Like(`%${title}%`),
       },
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);

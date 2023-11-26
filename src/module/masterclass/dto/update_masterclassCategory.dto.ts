@@ -9,7 +9,6 @@ export class UpdateMasterclassCategoryDto {
   @MaxLength(200)
   title_ru: string;
 
-
   @IsString()
   title_descrioption: string;
 

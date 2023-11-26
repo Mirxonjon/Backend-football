@@ -21,5 +21,4 @@ export class UpdateUserDto {
 
   @IsString()
   was_born_date: string;
-
 }

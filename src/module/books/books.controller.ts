@@ -28,9 +28,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { BooksServise } from './books.service';
-import {
-  FileFieldsInterceptor,
-} from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CreateBookDto } from './dto/create_book.dto';
 import { UpdateBookDto } from './dto/update_book.dto';
 import { jwtGuard } from '../auth/guards/jwt.guard';
@@ -47,10 +45,12 @@ export class BooksController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async findall(@Query('pageNumber') pageNumber: number ,@Query('pageSize') pageSize: number) {
-    return await this.#_service.findAll(pageNumber , pageSize);
+  async findall(
+    @Query('pageNumber') pageNumber: number,
+    @Query('pageSize') pageSize: number,
+  ) {
+    return await this.#_service.findAll(pageNumber, pageSize);
   }
-
 
   @Get('/one/:id')
   @ApiBadRequestResponse()
@@ -80,7 +80,6 @@ export class BooksController {
   async getfilterRu(@Query('title') title: string) {
     return await this.#_service.getfilterRu(title);
   }
-
 
   @UseGuards(jwtGuard)
   @Post('create')
@@ -199,7 +198,6 @@ export class BooksController {
   @ApiOperation({ summary: 'Attendance Punch In' })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-
   @UseInterceptors(FileFieldsInterceptor([{ name: 'book' }, { name: 'image' }]))
   async update(
     @Param('id') id: string,
@@ -207,7 +205,6 @@ export class BooksController {
     @UploadedFiles()
     book: { book?: Express.Multer.File; image?: Express.Multer.File },
   ) {
-
     await this.#_service.update(
       id,
       updateBook,

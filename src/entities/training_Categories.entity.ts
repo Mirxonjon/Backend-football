@@ -56,6 +56,9 @@ export class TrainingCategoriesEntity extends BaseEntity {
   @CreateDateColumn({ name: 'created_at' })
   create_data: Date;
 
-  @OneToMany(() => TrainingSubCategoriesEntity, (sub_category) => sub_category.category_id)
+  @OneToMany(
+    () => TrainingSubCategoriesEntity,
+    (sub_category) => sub_category.category_id,
+  )
   Training_sub_category: TrainingSubCategoriesEntity[];
 }

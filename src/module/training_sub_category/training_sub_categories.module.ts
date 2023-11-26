@@ -5,6 +5,6 @@ import { AuthServise } from '../auth/auth.service';
 
 @Module({
   controllers: [TrainingSubCategoriesController],
-  providers: [TrainingSubCategoriesService , AuthServise],
+  providers: [TrainingSubCategoriesService, AuthServise],
 })
 export class TrainingSubCategoriesModule {}

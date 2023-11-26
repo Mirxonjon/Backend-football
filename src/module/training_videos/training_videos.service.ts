@@ -17,8 +17,8 @@ import { Like } from 'typeorm';
 @Injectable()
 export class TrainingVideosServise {
   readonly #_auth: AuthServise;
-  constructor( auth : AuthServise) {
-    this.#_auth = auth
+  constructor(auth: AuthServise) {
+    this.#_auth = auth;
   }
 
   // async getall(category_id: string, header: any) {
@@ -97,25 +97,25 @@ export class TrainingVideosServise {
   //     return allCourseVideos;
   //   }
   // }
-  async findBySubCategory(id :string) {
+  async findBySubCategory(id: string) {
     const findBySubCategory = await TrainingVideosEntity.find({
-      where : {
-       sub_Category_id : {
-        id : id
-       }
-      }
-    })
-    return findBySubCategory
+      where: {
+        sub_Category_id: {
+          id: id,
+        },
+      },
+    });
+    return findBySubCategory;
   }
 
   async findAll() {
-     const  findAll = await TrainingVideosEntity.find({
-      relations : {
-        sub_Category_id : true
-      }
-     })
+    const findAll = await TrainingVideosEntity.find({
+      relations: {
+        sub_Category_id: true,
+      },
+    });
 
-     return findAll
+    return findAll;
   }
 
   async findOne(id: string, header: CustomHeaders) {
@@ -125,20 +125,19 @@ export class TrainingVideosServise {
       throw new HttpException('Video not found', HttpStatus.NOT_FOUND);
     }
 
-    if( openVideosSequance.includes(findVideo.sequence) ) {
+    if (openVideosSequance.includes(findVideo.sequence)) {
       return findVideo;
-    }else if(header.access_token) {
-      const data = this.#_auth.verify(header.access_token)
-      
-      if(data) {
-      return findVideo;
-      }
-      else {
-      throw new HttpException('token hato', HttpStatus.NOT_FOUND);
+    } else if (header.access_token) {
+      const data = this.#_auth.verify(header.access_token);
+
+      if (data) {
+        return findVideo;
+      } else {
+        throw new HttpException('token hato', HttpStatus.NOT_FOUND);
       }
     } else {
       findVideo.video_link = `fdsfahbs${findVideo.video_link}ghefhjrtu`;
-      
+
       return findVideo;
     }
   }
@@ -146,11 +145,11 @@ export class TrainingVideosServise {
   async getfilterUz(title: string) {
     const filterTacticCategory = await TrainingVideosEntity.find({
       where: {
-        title: Like(`%${title}%`)
+        title: Like(`%${title}%`),
       },
-      relations : {
-        sub_Category_id :true
-      }
+      relations: {
+        sub_Category_id: true,
+      },
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
@@ -158,22 +157,20 @@ export class TrainingVideosServise {
     return filterTacticCategory;
   }
 
-  
   async getfilterRu(title: string) {
     const filterTacticCategory = await TrainingVideosEntity.find({
       where: {
-        title_ru: Like(`%${title}%`)
+        title_ru: Like(`%${title}%`),
       },
-      relations : {
-        sub_Category_id :true
-      }
+      relations: {
+        sub_Category_id: true,
+      },
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
     return filterTacticCategory;
   }
-
 
   async create(
     body: CreateTrainingVideosDto,
@@ -263,7 +260,9 @@ export class TrainingVideosServise {
     if (!findVideo) {
       throw new HttpException('Video not found', HttpStatus.NOT_FOUND);
     }
-    const findSubCategory = await TrainingSubCategoriesEntity.findOneBy({id :body.sub_category_id})
+    const findSubCategory = await TrainingSubCategoriesEntity.findOneBy({
+      id: body.sub_category_id,
+    });
 
     let formatImage: string = 'Not image';
     let formatVideo: string = 'Not video';
@@ -287,13 +286,13 @@ export class TrainingVideosServise {
         let video_link = findVideo.video_link;
 
         if (formatImage !== 'Not image') {
-          await deleteFileCloud(tactic_img); 
+          await deleteFileCloud(tactic_img);
           tactic_img = googleCloud(image);
         }
 
         if (formatVideo !== 'Not video') {
-          await deleteFileCloud(video_link); 
-          video_link = googleCloud(video); 
+          await deleteFileCloud(video_link);
+          video_link = googleCloud(video);
         }
 
         const updatedVideo = await TrainingVideosEntity.update(id, {
@@ -307,7 +306,7 @@ export class TrainingVideosServise {
             body.description_tactic_ru || findVideo.description_tactic_ru,
           tactic_img,
           video_link,
-          sub_Category_id : findSubCategory || findVideo.sub_Category_id ,
+          sub_Category_id: findSubCategory || findVideo.sub_Category_id,
         });
         return updatedVideo;
       } else {
