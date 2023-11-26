@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTrainingVideosDto } from './dto/create_training_video.dto';
-import { TrainingCategoriesEntity } from 'src/entities/training_Categories.entity';
 import { extname } from 'path';
 import { deleteFileCloud, googleCloud } from 'src/utils/google_cloud';
 import { TrainingVideosEntity } from 'src/entities/training_Videos.entity';
@@ -10,10 +9,10 @@ import {
   allowedVideoFormats,
   openVideosSequance,
 } from 'src/utils/videoAndImageFormat';
-import { TakeEntity } from 'src/entities/take.entity';
 import { AuthServise } from '../auth/auth.service';
 import { CustomHeaders } from 'src/types';
 import { TrainingSubCategoriesEntity } from 'src/entities/training_sub_Category';
+import { Like } from 'typeorm';
 
 @Injectable()
 export class TrainingVideosServise {
@@ -98,6 +97,26 @@ export class TrainingVideosServise {
   //     return allCourseVideos;
   //   }
   // }
+  async findBySubCategory(id :string) {
+    const findBySubCategory = await TrainingVideosEntity.find({
+      where : {
+       sub_Category_id : {
+        id : id
+       }
+      }
+    })
+    return findBySubCategory
+  }
+
+  async findAll() {
+     const  findAll = await TrainingVideosEntity.find({
+      relations : {
+        sub_Category_id : true
+      }
+     })
+
+     return findAll
+  }
 
   async findOne(id: string, header: CustomHeaders) {
     const findVideo = await TrainingVideosEntity.findOneBy({ id });
@@ -122,11 +141,39 @@ export class TrainingVideosServise {
       
       return findVideo;
     }
-
-
-
-
   }
+
+  async getfilterUz(title: string) {
+    const filterTacticCategory = await TrainingVideosEntity.find({
+      where: {
+        title: Like(`%${title}%`)
+      },
+      relations : {
+        sub_Category_id :true
+      }
+    }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    return filterTacticCategory;
+  }
+
+  
+  async getfilterRu(title: string) {
+    const filterTacticCategory = await TrainingVideosEntity.find({
+      where: {
+        title_ru: Like(`%${title}%`)
+      },
+      relations : {
+        sub_Category_id :true
+      }
+    }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    return filterTacticCategory;
+  }
+
 
   async create(
     body: CreateTrainingVideosDto,

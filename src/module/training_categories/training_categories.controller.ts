@@ -20,7 +20,6 @@ import {
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
-  ApiHeader,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -43,12 +42,22 @@ export class TrainingCategoriesController {
     this.#_service = service;
   }
 
+  
+
   @Get('/all') 
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
   async getall() {
     return await this.#_service.getall();
+  }
+
+  @Get('/allWithPage?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findall(@Query('pageNumber') pageNumber: number ,@Query('pageSize') pageSize: number) {
+    return await this.#_service.findAll(pageNumber , pageSize);
   }
 
   @Get('/filter?')
@@ -68,6 +77,22 @@ export class TrainingCategoriesController {
      return await this.#_service.findOne(id);
   }
 
+  @Get('/filter/uz?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterUz(@Query('title') title: string) {
+    return await this.#_service.getfilterUz(title);
+  }
+
+  @Get('/filter/ru?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterRu(@Query('title') title: string) {
+    return await this.#_service.getfilterRu(title);
+  }
+
   @UseGuards(jwtGuard)
   @Post('create')
   @HttpCode(HttpStatus.CREATED)
@@ -79,13 +104,10 @@ export class TrainingCategoriesController {
         'title_ru',
         'traning_for_age',
         'description_training',
+        'description_training_ru',
         'image',
       ],
       properties: {
-        payload: {
-          type: 'string',
-          default: 'Texnikani rivojlantirish',
-        },
         title: {
           type: 'string',
           default: 'Texnikani rivojlantirish',

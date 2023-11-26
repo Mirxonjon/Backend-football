@@ -7,10 +7,10 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn,
   } from 'typeorm';
-  import { TacticCategoriesEntity } from './tactic_Categories.entity';
+import { MasterclassCategoryEntity } from './masterclass_category';
   
   @Entity()
-  export class MasterclassEntity extends BaseEntity {
+  export class MasterclassVideosEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
   
@@ -28,12 +28,7 @@ import {
     })
     title_ru: string;
   
-    @Column({
-      type: 'character varying',
-      nullable: false,
-    })
-    title_img_link: string;
-
+    
     @Column({
       type: 'character varying',
       nullable: false,
@@ -46,6 +41,13 @@ import {
       })
     description_title: string;
     
+    
+    @Column({
+        type: 'character varying',
+        nullable: false,
+      })
+    description_title_ru: string;
+
     @Column({
       type: 'character varying',
       nullable: false,
@@ -58,9 +60,20 @@ import {
     })
     description_tactic_ru: string;
 
+    @Column({
+      type: 'character varying',
+      nullable: false,
+    })
+    video_link: string;
+
     @CreateDateColumn({ name: 'created_at' })
     create_data: Date;
   
+    @ManyToOne(() => MasterclassCategoryEntity, (MasterclassCategory) => MasterclassCategory.MasterclassVideos, {
+        onDelete: 'CASCADE',
+      })
+      @JoinColumn({ name: 'category_id' })
+      category_id: MasterclassCategoryEntity;
 
   }
   

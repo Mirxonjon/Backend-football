@@ -8,6 +8,7 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     UploadedFiles,
     UseGuards,
     UseInterceptors,
@@ -24,19 +25,19 @@ import {
     ApiOperation,
     ApiTags,
   } from '@nestjs/swagger';
-  import { MasterClassServise } from './masterclass.service';
+  import { MasterClassCategoryServise } from './masterclass_category.service';
   import {
     FileFieldsInterceptor,
   } from '@nestjs/platform-express';
-  import { CreateMasterClassDto } from './dto/create_masterclass.dto';
-  import { UpdateTacticVideosDto } from './dto/update_tactic_video.dto';
+  import { CreateMasterClassCategoryDto } from './dto/create_masterclassCategory.dto';
+  import { UpdateMasterclassCategoryDto } from './dto/update_masterclassCategory.dto';
   import { jwtGuard } from '../auth/guards/jwt.guard';
-  @Controller('Masterclass')
-  @ApiTags('Masterclass')
+  @Controller('MasterclassCategory')
+  @ApiTags('MasterclassCategory')
   @ApiBearerAuth('JWT-auth')
-  export class MasterClassController {
-    readonly #_service: MasterClassServise;
-    constructor(service: MasterClassServise) {
+  export class MasterClassCategoryController {
+    readonly #_service: MasterClassCategoryServise;
+    constructor(service: MasterClassCategoryServise) {
       this.#_service = service;
     }
     @Get('/all')
@@ -46,6 +47,16 @@ import {
     async getall() {
       return await this.#_service.getall();
     }
+
+    
+  @Get('/allWithPage?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findall(@Query('pageNumber') pageNumber: number ,@Query('pageSize') pageSize: number) {
+    return await this.#_service.findAll(pageNumber , pageSize);
+  }
+
   
     @Get('/one/:id')
     @ApiBadRequestResponse()
@@ -54,6 +65,22 @@ import {
    
     async findOne(@Param('id') id: string) {
       return await this.#_service.findOne(id);
+    }
+
+    @Get('/filter/uz?')
+    @ApiBadRequestResponse()
+    @ApiNotFoundResponse()
+    @ApiOkResponse()
+    async getfilterUz(@Query('title') title: string) {
+      return await this.#_service.getfilterUz(title);
+    }
+  
+    @Get('/filter/ru?')
+    @ApiBadRequestResponse()
+    @ApiNotFoundResponse()
+    @ApiOkResponse()
+    async getfilterRu(@Query('title') title: string) {
+      return await this.#_service.getfilterRu(title);
     }
   
     @UseGuards(jwtGuard)
@@ -65,10 +92,8 @@ import {
         required: [
           'title',
           'title_ru',
-          'description_title',
-          'description_tactic',
-          'description_tactic_ru',
-          'title_image',
+          'title_descrioption',
+          'title_descrioption_ru',
           'image'
         ],
         properties: {
@@ -80,21 +105,13 @@ import {
             type: 'string',
             default: 'Rafa Benítez',
           },
-          description_title: {
-            type: 'string',
-            default: 'RAFA BENÍTEZ Valencia, 2001-2004; Liverpool, 2004-2010',
-          },
-          description_tactic: {
+          title_descrioption: {
             type: 'string',
             default: 'uuid23422',
           },
-          description_tactic_ru: {
+          title_descrioption_ru: {
             type: 'string',
             default: 'Хорошее обучение',
-          },
-          title_image: {
-            type: 'string',
-            format: 'binary',
           },
           image: {
             type: 'string',
@@ -110,17 +127,16 @@ import {
     @ApiNotFoundResponse()
 
     @UseInterceptors(
-      FileFieldsInterceptor([{ name: 'title_image' }, { name: 'image' }]),
+      FileFieldsInterceptor([{ name: 'image' }]),
     )
     async create(
       @UploadedFiles()
-      videos: { title_image?: Express.Multer.File; image?: Express.Multer.File },
-      @Body() createTacticVideo: CreateMasterClassDto,
+      file: {  image?: Express.Multer.File },
+      @Body() createMasterClassCategoryDto: CreateMasterClassCategoryDto,
     ) {
       return await this.#_service.create(
-        createTacticVideo,
-        videos.title_image[0],
-        videos.image[0],
+        createMasterClassCategoryDto,
+        file.image[0],
       );
     }
   
@@ -139,21 +155,13 @@ import {
             type: 'string',
             default: 'Rafa Benítez',
           },
-          description_title: {
-            type: 'string',
-            default: 'RAFA BENÍTEZ Valencia, 2001-2004; Liverpool, 2004-2010',
-          },
-          description_tactic: {
+          title_descrioption: {
             type: 'string',
             default: 'uuid23422',
           },
-          description_tactic_ru: {
+          title_descrioption_ru: {
             type: 'string',
             default: 'Хорошее обучение',
-          },
-          title_image: {
-            type: 'string',
-            format: 'binary',
           },
           image: {
             type: 'string',
@@ -168,21 +176,21 @@ import {
     @ApiNotFoundResponse()
 
     @UseInterceptors(
-      FileFieldsInterceptor([{ name: 'title_image' }, { name: 'image' }]),
+      FileFieldsInterceptor([{ name: 'image' }]),
     )
     async update(
       @Param('id') id: string,
-
-      @Body() updateTacticVideos: UpdateTacticVideosDto,
+      @Body() updateMasterclassCategoryDto: UpdateMasterclassCategoryDto,
       @UploadedFiles()
-      images: { title_image?: Express.Multer.File; image?: Express.Multer.File },
+      files: { image?: Express.Multer.File },
     ) {
+      console.log(files);
+      
     
       await this.#_service.update(
         id,
-        updateTacticVideos,
-        images?.title_image ? images?.title_image[0] : null,
-        images?.image ? images?.image[0] : null,
+        updateMasterclassCategoryDto,
+        files?.image ? files?.image[0] : null,
       );
     }
   

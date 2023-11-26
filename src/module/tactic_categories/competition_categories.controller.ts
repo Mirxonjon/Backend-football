@@ -3,14 +3,12 @@ import {
   Controller,
   Delete,
   Get,
-  Headers,
   HttpCode,
   HttpStatus,
   Param,
   Patch,
   Post,
   Query,
-  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -21,25 +19,24 @@ import {
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
-  ApiHeader,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { TacticCategoriesService } from './tactic_categories.service';
-import { CreateTacticCategoryDto } from './dto/create-tactic_category.dto';
+import { CompetitionCategoriesService } from './competition_categories.service';
+import { CreateCompetitionCategoryDto } from './dto/create-tactic_category.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UpdateTacticCategory } from './dto/update-tactic_category.dto';
+import { UpdateCompetitionCategory } from './dto/update-tactic_category.dto';
 import { jwtGuard } from '../auth/guards/jwt.guard';
 
-@Controller('tacticCategories')
-@ApiTags('Tactic categories')
+@Controller('competitionCategories')
+@ApiTags('Competition categories')
 @ApiBearerAuth('JWT-auth')
-export class TacticCategoriesController {
-  readonly #_service: TacticCategoriesService;
-  constructor(service: TacticCategoriesService) {
+export class CompetitionCategoriesController {
+  readonly #_service: CompetitionCategoriesService;
+  constructor(service: CompetitionCategoriesService) {
     this.#_service = service;
   }
 
@@ -51,25 +48,36 @@ export class TacticCategoriesController {
     return await this.#_service.getall();
   }
 
-  @Get('/filter?')
+  @Get('/filter/uz?')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async getfilter(@Query('tactic_category') tactic_category: string) {
-    return await this.#_service.getfilter(tactic_category);
+  async getfilterUz(@Query('title') title: string) {
+    return await this.#_service.getfilterUz(title);
+  }
+
+  @Get('/filter/ru?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterRu(@Query('title') title: string) {
+    return await this.#_service.getfilterRu(title);
   }
 
   @Get('/one/:id')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  @ApiHeader({
-    name: 'autharization',
-    description: 'User token',
-    required: false,
-  })
-  async findOne(@Param('id') id: string, @Headers() header: any) {
-    return await this.#_service.findOne(id, header);
+  async findOne(@Param('id') id: string) {
+    return await this.#_service.findOne(id);
+  }
+  
+  @Get('/allWithPage?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findall(@Query('pageNumber') pageNumber: number ,@Query('pageSize') pageSize: number) {
+    return await this.#_service.findAll(pageNumber , pageSize);
   }
 
   @UseGuards(jwtGuard)
@@ -104,11 +112,10 @@ export class TacticCategoriesController {
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-
   @UseInterceptors(FileInterceptor('image'))
   async create(
     @UploadedFile() image: Express.Multer.File,
-    @Body() createTacticCategory: CreateTacticCategoryDto,
+    @Body() createTacticCategory: CreateCompetitionCategoryDto,
   ) {
     return await this.#_service.create(createTacticCategory, image);
   }
@@ -146,7 +153,7 @@ export class TacticCategoriesController {
   @UseInterceptors(FileInterceptor('image'))
   async update(
     @Param('id') id: string,
-    @Body() updateTacticCategory: UpdateTacticCategory,
+    @Body() updateTacticCategory: UpdateCompetitionCategory,
     @UploadedFile() image: Express.Multer.File,
   ) {
 

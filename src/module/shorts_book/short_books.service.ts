@@ -10,12 +10,7 @@ import {
   allowedImageFormats,
   allowedVideoFormats,
 } from 'src/utils/videoAndImageFormat';
-import { TakeEntity } from 'src/entities/take.entity';
-import { TacticCategoriesEntity } from 'src/entities/tactic_Categories.entity';
-import { TacticVideosEntity } from 'src/entities/tactic_Videos.entity';
-import { UsersEntity } from 'src/entities/users.entity';
-import { BooksEntity } from 'src/entities/books.entity';
-import { BooksCategoriesEntity } from 'src/entities/books_Categories.entity';
+
 import { ShortBookCategoriesEntity } from 'src/entities/short_book_Categories.entity';
 import { ShortBooksEntity } from 'src/entities/short_books.entity';
 
@@ -30,6 +25,28 @@ export class ShortBooksServise {
     }
 
     return findBook
+  }
+
+  
+  async findAllWithpPage(pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+  
+    const [results, total] = await ShortBooksEntity.findAndCount({
+      skip: offset,
+      take: pageSize,
+    });
+  
+    const totalPages = Math.ceil(total / pageSize);
+  
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
   }
 
   async findAll() {

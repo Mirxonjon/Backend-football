@@ -7,6 +7,7 @@ import { deleteFileCloud, googleCloud } from 'src/utils/google_cloud';
 import { extname } from 'path';
 import { CustomHeaders, } from 'src/types';
 import { TrainingSubCategoriesEntity } from 'src/entities/training_sub_Category';
+import { Like } from 'typeorm';
 
 @Injectable()
 export class TrainingSubCategoriesService {
@@ -26,15 +27,18 @@ export class TrainingSubCategoriesService {
   //   return allTrainingCategory;
   // }
 
-  // async getall() {
-  //   const allTrainingCategory = await TrainingCategoriesEntity.find().catch(
-  //     (e) => {
-  //       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-  //     },
-  //   );
-
-  //   return allTrainingCategory;
-  // }
+  async getall() {
+    const allTrainingSubCategory = await TrainingSubCategoriesEntity.find({
+      relations : {
+        category_id : true
+      }
+    }).catch(
+      (e) => {
+        throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+      },
+    );
+    return allTrainingSubCategory;
+  }
 
   async findOne(id: string,  header: CustomHeaders) {
 
@@ -110,11 +114,52 @@ export class TrainingSubCategoriesService {
       }
       }
 
+     async findOneFilter( id :string) {
+      const  findCategory = await TrainingSubCategoriesEntity.find({
+        where : {
+          category_id : {
+            id :id
+          }
+        }
+      })
+      return findCategory
+      }
+
+      async getfilterUz(title: string) {
+        const filterTacticCategory = await TrainingSubCategoriesEntity.find({
+          where: {
+            title: Like(`%${title}%`)
+          },
+          relations : {
+            category_id :true
+          }
+        }).catch((e) => {
+          throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+        });
+        return filterTacticCategory;
+      }
+    
+      
+      async getfilterRu(title: string) {
+        const filterTacticCategory = await TrainingSubCategoriesEntity.find({
+          where: {
+            title_ru: Like(`%${title}%`)
+          },
+          relations : {
+            category_id :true
+          }
+        }).catch((e) => {
+          throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+        });
+    
+        return filterTacticCategory;
+      }
+
 
   async create(body: CreateTrainingSubCategoryDto) {
 
     const findCategory :TrainingCategoriesEntity = await TrainingCategoriesEntity.findOneBy({
-      title: body.category_id,
+      id: body.category_id,
     });
 
     if (!findCategory) {

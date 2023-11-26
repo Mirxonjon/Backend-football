@@ -12,6 +12,7 @@ import {
   ParseFilePipeBuilder,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UploadedFiles,
   UseGuards,
@@ -29,7 +30,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { ShortBooksServise } from './books.service';
+import { ShortBooksServise } from './short_books.service';
 import {
   FileFieldsInterceptor,
 } from '@nestjs/platform-express';
@@ -60,6 +61,14 @@ export class ShortBooksController {
   @ApiOkResponse()
   async findAll() {
     return await this.#_service.findAll();
+  }
+
+  @Get('/allWithpage?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findall(@Query('pageNumber') pageNumber: number ,@Query('pageSize') pageSize: number) {
+    return await this.#_service.findAllWithpPage(pageNumber , pageSize);
   }
 
 

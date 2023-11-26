@@ -2,17 +2,14 @@ import {
   Body,
   Controller,
   Delete,
-  FileTypeValidator,
   Get,
   Headers,
   HttpCode,
   HttpStatus,
   Param,
-  ParseFilePipe,
-  ParseFilePipeBuilder,
   Patch,
   Post,
-  UploadedFile,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -33,8 +30,6 @@ import {
 import { BooksServise } from './books.service';
 import {
   FileFieldsInterceptor,
-  FileInterceptor,
-  FilesInterceptor,
 } from '@nestjs/platform-express';
 import { CreateBookDto } from './dto/create_book.dto';
 import { UpdateBookDto } from './dto/update_book.dto';
@@ -48,6 +43,15 @@ export class BooksController {
     this.#_service = service;
   }
 
+  @Get('/allWithPage?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findall(@Query('pageNumber') pageNumber: number ,@Query('pageSize') pageSize: number) {
+    return await this.#_service.findAll(pageNumber , pageSize);
+  }
+
+
   @Get('/one/:id')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -59,6 +63,22 @@ export class BooksController {
   })
   async findOne(@Param('id') id: string, @Headers() header: any) {
     return await this.#_service.findOne(id, header);
+  }
+
+  @Get('/filter/uz?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterUz(@Query('title') title: string) {
+    return await this.#_service.getfilterUz(title);
+  }
+
+  @Get('/filter/ru?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterRu(@Query('title') title: string) {
+    return await this.#_service.getfilterRu(title);
   }
 
 

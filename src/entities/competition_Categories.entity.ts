@@ -3,13 +3,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { TacticVideosEntity } from './tactic_Videos.entity';
+import { CompetitionVideosEntity } from './competition_Videos.entity';
 
 @Entity()
-export class TacticCategoriesEntity extends BaseEntity {
+export class CompetitionCategoriesEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -33,15 +33,15 @@ export class TacticCategoriesEntity extends BaseEntity {
   })
   image: string;
 
-  @Column({
-    type: 'character varying',
-    nullable: false,
-  })
-  tactic_categories: string;
+  // @Column({
+  //   type: 'character varying',
+  //   nullable: false,
+  // })
+  // tactic_categories: string;
 
   @CreateDateColumn({ name: 'created_at' })
   create_data: Date;
 
-  @OneToMany(() => TacticVideosEntity, (videos) => videos.category_id)
-  Tactic_videos: TacticVideosEntity[];
+  @OneToOne(() => CompetitionVideosEntity, (videos) => videos.category_id)
+  Tactic_videos: CompetitionVideosEntity[];
 }

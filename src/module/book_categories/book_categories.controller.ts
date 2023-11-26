@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -43,6 +44,15 @@ export class BooksCategoriesController {
     return await this.#_service.getall();
   }
 
+  // @Get('/all?')
+  // @ApiBadRequestResponse()
+  // @ApiNotFoundResponse()
+  // @ApiOkResponse()
+  // async findall(@Query('pageNumber') pageNumber: number ,@Query('pageSize') pageSize: number) {
+  //   return await this.#_service.findAllWithPage(pageNumber , pageSize);
+  // }
+
+
   @Get('/one/:id')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -55,6 +65,25 @@ export class BooksCategoriesController {
   async findOne(@Param('id') id: string) {
     return await this.#_service.findOne(id);
   }
+
+    
+  @Get('/filter/uz?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterUz(@Query('title') title: string) {
+    return await this.#_service.getfilterUz(title);
+  }
+
+  @Get('/filter/ru?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterRu(@Query('title') title: string) {
+    return await this.#_service.getfilterRu(title);
+  }
+
+
 
   @UseGuards(jwtGuard)
   @Post('create')

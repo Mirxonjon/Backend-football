@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateBookCategoryDto } from './dto/create-book_category.dto';
 import { UpdateBookCategory } from './dto/update-book_category.dto';
 import { BooksCategoriesEntity } from 'src/entities/books_Categories.entity';
+import { Like } from 'typeorm';
 @Injectable()
 export class BooksCategoriesService {
 
@@ -12,6 +13,29 @@ export class BooksCategoriesService {
 
     return allBookCategory;
   }
+
+  // async findAllWithPage(pageNumber = 1, pageSize = 10) {
+  //   const offset = (pageNumber - 1) * pageSize;
+  
+  //   const [results, total] = await BooksCategoriesEntity.findAndCount({
+      
+  //     skip: offset,
+  //     take: pageSize,
+  //   });
+  
+  //   const totalPages = Math.ceil(total / pageSize);
+  
+  //   return {
+  //     results,
+  //     pagination: {
+  //       currentPage: pageNumber,
+  //       totalPages,
+  //       pageSize,
+  //       totalItems: total,
+  //     },
+  //   };
+  // }
+  
 
   async findOne(id: string) {
     const findCategory: BooksCategoriesEntity =
@@ -32,6 +56,33 @@ export class BooksCategoriesService {
       }
     return findCategory;
   }
+
+  async getfilterUz(title: string) {
+    const filterTacticCategory = await BooksCategoriesEntity.find({
+      where: {
+        title: Like(`%${title}%`)
+      },
+  
+    }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    return filterTacticCategory;
+  }
+
+  
+  async getfilterRu(title: string) {
+    const filterTacticCategory = await BooksCategoriesEntity.find({
+      where: {
+        title_ru: Like(`%${title}%`)
+      },
+    
+    }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    return filterTacticCategory;
+  } 
 
   async create(body: CreateBookCategoryDto) {
     const findCategory = await BooksCategoriesEntity.findOneBy({

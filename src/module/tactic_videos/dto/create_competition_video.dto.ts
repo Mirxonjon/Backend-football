@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, MaxLength, IsNumber } from 'class-validator';
 
-export class CreateTacticVideosDto {
+export class CreateCompetitionVideosDto {
   @IsString()
   @IsNotEmpty()
   tactic_id: string;
@@ -18,17 +18,13 @@ export class CreateTacticVideosDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(10)
-  duration: string;
+  video_link: string;
 
   @IsString()
   @IsNotEmpty()
-  sequence: number;
+  description_video: string;
 
   @IsString()
   @IsNotEmpty()
-  description_tactic: string;
-
-  @IsString()
-  @IsNotEmpty()
-  description_tactic_ru: string;
+  description_video_ru: string;
 }

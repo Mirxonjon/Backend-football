@@ -39,13 +39,13 @@ export class TrainingSubCategoriesController {
     this.#_service = service;
   }
 
-  // @Get('/all')
-  // @ApiBadRequestResponse()
-  // @ApiNotFoundResponse()
-  // @ApiOkResponse()
-  // async getall() {
-  //   return await this.#_service.getall();
-  // }
+  @Get('/all')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getall() {
+    return await this.#_service.getall();
+  }
 
   // @Get('/filter?')
   // @ApiBadRequestResponse()
@@ -55,6 +55,7 @@ export class TrainingSubCategoriesController {
   //   return await this.#_service.getfilter(age);
   // }
 
+  
   @Get('/one/:id')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -65,7 +66,32 @@ export class TrainingSubCategoriesController {
     required: false,
   })
   async findOne( @Param('id') id: string ,  @Headers() headers: CustomHeaders) {
-     return await this.#_service.findOne(id, headers);
+    return await this.#_service.findOne(id, headers);
+  }
+
+  @UseGuards(jwtGuard)
+  @Get('/filterByCategory/:id')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findOneFilter( @Param('id') id: string ) {
+     return await this.#_service.findOneFilter(id);
+  }
+
+  @Get('/filter/uz?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterUz(@Query('title') title: string) {
+    return await this.#_service.getfilterUz(title);
+  }
+
+  @Get('/filter/ru?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterRu(@Query('title') title: string) {
+    return await this.#_service.getfilterRu(title);
   }
 
   @UseGuards(jwtGuard)

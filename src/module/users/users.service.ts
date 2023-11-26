@@ -6,32 +6,37 @@ import {
   allowedImageFormats,
 } from 'src/utils/videoAndImageFormat';
 import { UsersEntity } from 'src/entities/users.entity';
-import { ShortBookCategoriesEntity } from 'src/entities/short_book_Categories.entity';
-import { ShortBooksEntity } from 'src/entities/short_books.entity';
 import { AddAdminDto } from './dto/add-admin.dto';
+import { AuthServise } from '../auth/auth.service';
 
 @Injectable()
 export class UsersServise {
-  async findOne(id: string) {
-
-    const findUser = await UsersEntity.findOneBy({ id });
-
-    if (!findUser) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
-
-    return findUser
+  readonly #_authService : AuthServise
+  constructor(authService : AuthServise) {
+    this.#_authService = authService
   }
-
-  async findAll() {
-
-    const findUsers = await UsersEntity.find();
-
-    if (!findUsers) {
-      throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
+  async findOne(header : any) {
+    if(header.access_token) {
+      const user  = await this.#_authService.verify(header.access_token)
+      const findUser = await UsersEntity.findOneBy({ id: user.id });
+      if (!findUser) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+      return findUser
+    } else {
+      return undefined
     }
-
-    return findUsers
+    }
+    
+    async findAll() {
+      
+      const findUsers = await UsersEntity.find();
+      
+      if (!findUsers) {
+        throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
+      }
+      
+      return findUsers
   }
 
 

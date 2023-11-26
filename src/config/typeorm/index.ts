@@ -3,16 +3,18 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UsersEntity } from 'src/entities/users.entity';
 import { TrainingCategoriesEntity } from 'src/entities/training_Categories.entity';
 import { TrainingVideosEntity } from 'src/entities/training_Videos.entity';
-import { TacticCategoriesEntity } from 'src/entities/tactic_Categories.entity';
-import { TacticVideosEntity } from 'src/entities/tactic_Videos.entity';
+import { CompetitionCategoriesEntity } from 'src/entities/competition_Categories.entity';
+import { CompetitionVideosEntity } from 'src/entities/competition_Videos.entity';
 import { BooksCategoriesEntity } from 'src/entities/books_Categories.entity';
 import { BooksEntity } from 'src/entities/books.entity';
 import { TakeEntity } from 'src/entities/take.entity';
 import { TakeBooksEntity } from 'src/entities/take_books.entity';
-import { MasterclassEntity } from 'src/entities/masterclass';
+
 import { ShortBookCategoriesEntity } from 'src/entities/short_book_Categories.entity';
 import { ShortBooksEntity } from 'src/entities/short_books.entity';
 import { TrainingSubCategoriesEntity } from 'src/entities/training_sub_Category';
+import { MasterclassCategoryEntity } from 'src/entities/masterclass_category';
+import { MasterclassVideosEntity } from 'src/entities/masterclass_Videos';
 
 dotenv.config();
 
@@ -28,13 +30,14 @@ export const connectDb: TypeOrmModuleOptions = {
     TrainingCategoriesEntity,
     TrainingSubCategoriesEntity,
     TrainingVideosEntity,
-    TacticCategoriesEntity,
-    TacticVideosEntity,
+    CompetitionCategoriesEntity,
+    CompetitionVideosEntity,
     BooksCategoriesEntity,
     BooksEntity,
     TakeEntity,
     TakeBooksEntity,
-    MasterclassEntity,
+    MasterclassCategoryEntity,
+    MasterclassVideosEntity,
     ShortBookCategoriesEntity,
     ShortBooksEntity
   ],

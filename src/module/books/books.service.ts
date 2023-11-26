@@ -1,104 +1,45 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Get, HttpException, HttpStatus, Injectable, Query } from '@nestjs/common';
 import { CreateBookDto } from './dto/create_book.dto';
-import { TrainingCategoriesEntity } from 'src/entities/training_Categories.entity';
 import { extname } from 'path';
 import { deleteFileCloud, googleCloud } from 'src/utils/google_cloud';
-import { TrainingVideosEntity } from 'src/entities/training_Videos.entity';
 import { UpdateBookDto } from './dto/update_book.dto';
 import {
   allowedBookFormats,
   allowedImageFormats,
-  allowedVideoFormats,
 } from 'src/utils/videoAndImageFormat';
-import { TakeEntity } from 'src/entities/take.entity';
-import { TacticCategoriesEntity } from 'src/entities/tactic_Categories.entity';
-import { TacticVideosEntity } from 'src/entities/tactic_Videos.entity';
-import { UsersEntity } from 'src/entities/users.entity';
+
 import { BooksEntity } from 'src/entities/books.entity';
 import { BooksCategoriesEntity } from 'src/entities/books_Categories.entity';
+import { Like } from 'typeorm';
 
 @Injectable()
 export class BooksServise {
-  // async getall(category_id :string , header :any){
-  //   const userId =  'uuu'
-  //   const findCategory = await  TacticCategoriesEntity.findOneBy({id : category_id }).catch(e => {
-  //     throw new HttpException(
-  //       'Bad request',
-  //       HttpStatus.BAD_REQUEST,
-  //     );})
-  //   if(!findCategory){
-  //     throw new HttpException(
-  //       'Category not found',
-  //       HttpStatus.NOT_FOUND,
-  //   )}
 
-  //   const allVideosCategory :any[] = await TacticVideosEntity.find({
-  //     where : {
-  //       category_id :{
-  //         id: findCategory.id
-  //       }
-  //     },
-  //     order: {
-  //     sequence : 'ASC'
-  //     }
-  //   }).catch(e => {
-  //     throw new HttpException(
-  //       'Bad request',
-  //       HttpStatus.BAD_REQUEST,
-  //     );})
+  async findAll(pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+  
+    const [results, total] = await BooksEntity.findAndCount({
+      relations: {
+        category_id: true,
+      },
+      skip: offset,
+      take: pageSize,
+    });
+  
+    const totalPages = Math.ceil(total / pageSize);
+  
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
+  }
+  
 
-  //     if(!allVideosCategory){
-  //       throw new HttpException(
-  //         'Videos not found',
-  //         HttpStatus.NOT_FOUND,
-  //     )}
-
-  // const allCourseVideos = [...allVideosCategory];
-
-  //     if (userId) {
-  //       const userTakeCourse = await UsersEntity.findOneBy({
-  //         id: userId
-  //       }).catch(() => {
-  //         throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
-  //       });
-
-  //       // if (userTakeCourse.active) {
-  //       //   for (let i = 0; i < allCourseVideos.length; i++) {
-  //       //     allCourseVideos[i].video_active = true;
-  //       //   }
-
-  //       //   return allCourseVideos;
-  //       // } else {
-  //       //   for (let i = 0; i < allCourseVideos.length; i++) {
-  //       //     if(i>1) {
-  //       //       allCourseVideos[i].video_active = false;
-  //       //       allCourseVideos[i].link = allCourseVideos[i].video_link
-  //       //       .split('')
-  //       //       .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
-  //       //       .join('');
-  //       //     }else {
-  //       //     allCourseVideos[i].video_active = true;
-  //       //     }
-  //       //   }
-  //       //   return allCourseVideos;
-  //       // }
-  //         return allCourseVideos;
-
-  //     } else {
-  //       for (let i = 0; i < allCourseVideos.length; i++) {
-  //         if(i>1) {
-  //           allCourseVideos[i].video_active = false;
-  //           allCourseVideos[i].link = allCourseVideos[i].video_link
-  //           .split('')
-  //           .map((e, i) => (i % 2 ? 'w' + e : e + 's'))
-  //           .join('');
-  //         }else {
-  //         allCourseVideos[i].video_active = false;
-  //         }
-  //       }
-  //       return allCourseVideos;
-  //     }
-  // }
 
   async findOne(id: string, header: any) {
     const user_id = false;
@@ -117,6 +58,38 @@ export class BooksServise {
       return findBook;
     }
   }
+
+  async getfilterUz(title: string) {
+    const filterBookCategory = await BooksEntity.find({
+      where: {
+        title: Like(`%${title}%`)
+      },
+      relations : {
+        category_id :true
+      }
+    }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    return filterBookCategory;
+  }
+
+  
+  async getfilterRu(title: string) {
+    const filterBookCategory = await BooksEntity.find({
+      where: {
+        title_ru: Like(`%${title}%`)
+      },
+      relations : {
+        category_id :true
+      }
+    }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    return filterBookCategory;
+  }
+
 
   async create(
     body: CreateBookDto,
@@ -153,8 +126,10 @@ export class BooksServise {
     }
 
     const formatImage = extname(Bookimage?.originalname).toLowerCase();
+
+
+
     const formatBook = extname(book?.originalname).toLowerCase();
-    // console.log(formatBook);
 
     if (allowedImageFormats.includes(formatImage)) {
       if (allowedBookFormats.includes(formatBook)) {

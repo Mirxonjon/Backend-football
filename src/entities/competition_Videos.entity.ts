@@ -5,12 +5,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { TacticCategoriesEntity } from './tactic_Categories.entity';
+import { CompetitionCategoriesEntity } from './competition_Categories.entity';
 
 @Entity()
-export class TacticVideosEntity extends BaseEntity {
+export class CompetitionVideosEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -35,45 +36,27 @@ export class TacticVideosEntity extends BaseEntity {
   video_link: string;
 
   @Column({
-    type: 'integer',
+    type: 'character varying',
     nullable: false,
   })
-  sequence: number;
+  description_video: string;
 
   @Column({
     type: 'character varying',
     nullable: false,
   })
-  duration: string;
-
-  @Column({
-    type: 'character varying',
-    nullable: false,
-  })
-  tactic_img: string;
-
-  @Column({
-    type: 'character varying',
-    nullable: false,
-  })
-  description_tactic: string;
-
-  @Column({
-    type: 'character varying',
-    nullable: false,
-  })
-  description_tactic_ru: string;
+  description_video_ru: string;
 
   @CreateDateColumn({ name: 'created_at' })
   create_data: Date;
 
-  @ManyToOne(
-    () => TacticCategoriesEntity,
+  @OneToOne(
+    () => CompetitionCategoriesEntity,
     (categories) => categories.Tactic_videos,
     {
       onDelete: 'CASCADE',
     },
   )
   @JoinColumn({ name: 'category_id' })
-  category_id: TacticCategoriesEntity;
+  category_id: CompetitionCategoriesEntity;
 }

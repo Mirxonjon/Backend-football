@@ -6,6 +6,7 @@ import { UpdateTrainingCategory } from './dto/update-training_category.dto';
 import { deleteFileCloud, googleCloud } from 'src/utils/google_cloud';
 import { extname } from 'path';
 import { CustomHeaders, } from 'src/types';
+import { Like } from 'typeorm';
 
 // import soapRequest from 'easy-soap-request'
 @Injectable()
@@ -25,6 +26,28 @@ export class TrainingCategoriesService {
 
     return allTrainingCategory;
   }
+
+  async findAll(pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+  
+    const [results, total] = await TrainingCategoriesEntity.findAndCount({
+      skip: offset,
+      take: pageSize,
+    });
+  
+    const totalPages = Math.ceil(total / pageSize);
+  
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
+  }
+  
 
   async getall() {
     const allTrainingCategory = await TrainingCategoriesEntity.find().catch(
@@ -156,6 +179,31 @@ export class TrainingCategoriesService {
         HttpStatus.BAD_REQUEST,
       );
     }
+  }
+
+  async getfilterUz(title: string) {
+    const filterTacticCategory = await TrainingCategoriesEntity.find({
+      where: {
+        title: Like(`%${title}%`)
+      },
+    }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    return filterTacticCategory;
+  }
+
+  
+  async getfilterRu(title: string) {
+    const filterTacticCategory = await TrainingCategoriesEntity.find({
+      where: {
+        title_ru: Like(`%${title}%`)
+      },
+    }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    return filterTacticCategory;
   }
 
   async update(

@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, MaxLength } from 'class-validator';
 
-export class CreateTacticCategoryDto {
+export class CreateCompetitionCategoryDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(200)
@@ -10,8 +10,4 @@ export class CreateTacticCategoryDto {
   @IsNotEmpty()
   @MaxLength(200)
   title_ru: string;
-
-  @IsString()
-  @IsNotEmpty()
-  tactic_category: string;
 }

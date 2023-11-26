@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -57,6 +58,9 @@ export class TrainingVideosController {
   //   return await this.#_service.getall(id, header);
   // }
 
+
+
+
   @Get('/one/:id')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -70,6 +74,42 @@ export class TrainingVideosController {
     
     return await this.#_service.findOne(id, header);
   }
+
+  @UseGuards(jwtGuard)
+  @Get('/filterBySubCategory/:id')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findBySubCategory(@Param('id') id: string) {
+    return await this.#_service.findBySubCategory(id);
+  }
+
+  @UseGuards(jwtGuard)
+  @Get('/all')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findall() {
+    return await this.#_service.findAll();
+  }
+
+  
+  @Get('/filter/uz?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterUz(@Query('title') title: string) {
+    return await this.#_service.getfilterUz(title);
+  }
+
+  @Get('/filter/ru?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterRu(@Query('title') title: string) {
+    return await this.#_service.getfilterRu(title);
+  }
+
 
   @UseGuards(jwtGuard)
   @Post('create')

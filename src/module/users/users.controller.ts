@@ -8,7 +8,6 @@ import {
   HttpStatus,
   Param,
   Patch,
-  Post,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -19,6 +18,7 @@ import {
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
+  ApiHeader,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -41,12 +41,17 @@ export class UsersController {
     this.#_service = service;
   }
 
-  @Get('/one/:id')
+  @Get('/one')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async findOne(@Param('id') id: string) {
-    return await this.#_service.findOne(id);
+  @ApiHeader({
+    name: 'access_token',
+    description: 'User Token',
+    required: false,
+  })
+  async findOne(@Headers() header: any) {
+    return await this.#_service.findOne(header);
   }
 
 

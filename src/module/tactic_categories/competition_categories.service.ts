@@ -1,18 +1,45 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateTacticCategoryDto } from './dto/create-tactic_category.dto';
+import { CreateCompetitionCategoryDto } from './dto/create-tactic_category.dto';
 import { TrainingCategoriesEntity } from 'src/entities/training_Categories.entity';
-import { UpdateTacticCategory } from './dto/update-tactic_category.dto';
+import { UpdateCompetitionCategory } from './dto/update-tactic_category.dto';
 import { deleteFileCloud, googleCloud } from 'src/utils/google_cloud';
 import { extname } from 'path';
-import { TacticCategoriesEntity } from 'src/entities/tactic_Categories.entity';
+import { CompetitionCategoriesEntity } from 'src/entities/competition_Categories.entity';
+import { Like } from 'typeorm';
 // import soapRequest from 'easy-soap-request'
 @Injectable()
-export class TacticCategoriesService {
-  async getfilter(body: string) {
-    const allTacticCategory = await TacticCategoriesEntity.find({
+export class CompetitionCategoriesService {
+
+  async getfilterUz(title: string) {
+    const filterTacticCategory = await CompetitionCategoriesEntity.find({
       where: {
-        tactic_categories: body,
+        title: Like(`%${title}%`)
       },
+    }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    return filterTacticCategory;
+  }
+
+  
+  async getfilterRu(title: string) {
+    const filterTacticCategory = await CompetitionCategoriesEntity.find({
+      where: {
+        title_ru: Like(`%${title}%`)
+      },
+    }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    return filterTacticCategory;
+  }
+
+  async getall() {
+    const allTacticCategory = await CompetitionCategoriesEntity.find({
+      order:{
+        create_data : 'desc'
+      }
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
@@ -20,37 +47,44 @@ export class TacticCategoriesService {
     return allTacticCategory;
   }
 
-  async getall() {
-    const allTacticCategory = await TacticCategoriesEntity.find().catch((e) => {
-      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-    });
+  async findOne(id: string) {
 
-    return allTacticCategory;
-  }
-
-  async findOne(id: string, headers: any) {
-    const user_id = 'sdad';
-    const findCategory: TacticCategoriesEntity =
-      await TacticCategoriesEntity.findOne({
+    const findCategory: CompetitionCategoriesEntity =
+      await CompetitionCategoriesEntity.findOne({
+        where : {
+          id: id
+        },
         relations: {
-          Tactic_videos: true,
+          Tactic_videos :true
         },
       });
 
-    if (user_id && TrainingCategoriesEntity) {
-      const takeCourse = 200;
+      return findCategory
 
-      // if(takeCourse){
-      //   return findCategory
-      // } else {
-      //   for(let i =0 ;i<=findCategory.Training_videos.length;i++){
-
-      //   }
-      // }
-    }
   }
 
-  async create(body: CreateTacticCategoryDto, image: Express.Multer.File) {
+  async findAll(pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+  
+    const [results, total] = await CompetitionCategoriesEntity.findAndCount({
+      skip: offset,
+      take: pageSize,
+    });
+  
+    const totalPages = Math.ceil(total / pageSize);
+  
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
+  }
+
+  async create(body: CreateCompetitionCategoryDto, image: Express.Multer.File) {
     if (!image) {
       throw new HttpException(
         'image should not be empty',
@@ -58,7 +92,7 @@ export class TacticCategoriesService {
       );
     }
 
-    const findCategory = await TacticCategoriesEntity.findOneBy({
+    const findCategory = await CompetitionCategoriesEntity.findOneBy({
       title: body.title,
     });
 
@@ -78,13 +112,12 @@ export class TacticCategoriesService {
     ) {
       const link = googleCloud(image);
 
-      await TacticCategoriesEntity.createQueryBuilder()
+      await CompetitionCategoriesEntity.createQueryBuilder()
         .insert()
-        .into(TacticCategoriesEntity)
+        .into(CompetitionCategoriesEntity)
         .values({
           title: body.title,
           title_ru: body.title_ru,
-          tactic_categories: body.tactic_category,
           image: link,
         })
         .execute()
@@ -104,10 +137,10 @@ export class TacticCategoriesService {
 
   async update(
     id: string,
-    body: UpdateTacticCategory,
+    body: UpdateCompetitionCategory,
     image: Express.Multer.File,
   ) {
-    const findCategory = await TacticCategoriesEntity.findOneBy({
+    const findCategory = await CompetitionCategoriesEntity.findOneBy({
       id: id,
     }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
@@ -135,13 +168,11 @@ export class TacticCategoriesService {
         : await deleteFileCloud(findCategory.image);
       const link = formatImage == 'Not image' ? false : googleCloud(image);
 
-      await TacticCategoriesEntity.createQueryBuilder()
-        .update(TacticCategoriesEntity)
+      await CompetitionCategoriesEntity.createQueryBuilder()
+        .update(CompetitionCategoriesEntity)
         .set({
           title: body.title || findCategory.title,
           title_ru: body.title_ru || findCategory.title_ru,
-          tactic_categories:
-            body.tactic_category || findCategory.tactic_categories,
           image: link || findCategory.image,
         })
         .where({ id })
@@ -158,7 +189,7 @@ export class TacticCategoriesService {
   }
 
   async remove(id: string) {
-    const findCategory = await TacticCategoriesEntity.findOneBy({
+    const findCategory = await CompetitionCategoriesEntity.findOneBy({
       id: id,
     }).catch(() => {
       throw new HttpException('Not found Category', HttpStatus.BAD_REQUEST);
@@ -180,9 +211,9 @@ export class TacticCategoriesService {
       );
     }
 
-    await TacticCategoriesEntity.createQueryBuilder()
+    await CompetitionCategoriesEntity.createQueryBuilder()
       .delete()
-      .from(TacticCategoriesEntity)
+      .from(CompetitionCategoriesEntity)
       .where({ id })
       .execute();
   }

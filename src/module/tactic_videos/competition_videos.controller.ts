@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -17,54 +18,48 @@ import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
-  ApiConsumes,
   ApiCreatedResponse,
-  ApiHeader,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { TacticVideosServise } from './tactic_videos.service';
-import {
-  FileFieldsInterceptor,
-} from '@nestjs/platform-express';
-import { CreateTacticVideosDto } from './dto/create_tactic_video.dto';
-import { UpdateTacticVideosDto } from './dto/update_tactic_video.dto';
+import {  CompetitionVideosServise } from './competition_videos.service';
+
+import { CreateCompetitionVideosDto } from './dto/create_competition_video.dto';
+import { UpdateCompetitionVideosDto } from './dto/update_competition_video.dto';
 import { jwtGuard } from '../auth/guards/jwt.guard';
-@Controller('tacticVideos')
-@ApiTags('Tactic Videos')
+@Controller('competitionVideos')
+@ApiTags('Competition Videos')
 @ApiBearerAuth('JWT-auth')
-export class TacticVideosController {
-  readonly #_service: TacticVideosServise;
-  constructor(service: TacticVideosServise) {
+export class  CompetitionVideosController {
+  readonly #_service: CompetitionVideosServise;
+  constructor(service: CompetitionVideosServise) {
     this.#_service = service;
   }
-  @Get('/allbyCourse/:categoryid')
+  @Get('/all')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  @ApiHeader({
-    name: 'autharization',
-    description: 'User token',
-    required: false,
-  })
-  async getall(@Param('categoryid') id: string, @Headers() header: any) {
-    return await this.#_service.getall(id, header);
+  async getall() {
+    return await this.#_service.getall();
   }
 
   @Get('/one/:id')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  @ApiHeader({
-    name: 'autharization',
-    description: 'User token',
-    required: false,
-  })
-  async findOne(@Param('id') id: string, @Headers() header: any) {
-    return await this.#_service.findOne(id, header);
+  async findOne(@Param('id') id: string) {
+    return await this.#_service.findOne(id);
+  }
+
+  @Get('/allWithPage?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findall(@Query('pageNumber') pageNumber: number ,@Query('pageSize') pageSize: number) {
+    return await this.#_service.findAll(pageNumber , pageSize);
   }
 
   @UseGuards(jwtGuard)
@@ -77,12 +72,9 @@ export class TacticVideosController {
         'tactic_id',
         'title',
         'title_ru',
-        'duration',
-        'sequence',
-        'description_tactic',
-        'description_tactic_ru',
-        'video',
-        'image',
+        'description_video',
+        'description_video_ru',
+        'video_link',
       ],
       properties: {
         tactic_id: {
@@ -97,52 +89,32 @@ export class TacticVideosController {
           type: 'string',
           default: '1 chi darsru',
         },
-        duration: {
-          type: 'string',
-          default: '9:10m',
-        },
-        sequence: {
-          type: 'number',
-          default: 1,
-        },
-        description_tactic: {
+
+        description_video: {
           type: 'string',
           default: 'uuid23422',
         },
-        description_tactic_ru: {
+        description_video_ru: {
           type: 'string',
           default: 'Хорошее обучение',
         },
-        video: {
+        video_link: {
           type: 'string',
-          format: 'binary',
-        },
-        image: {
-          type: 'string',
-          format: 'binary',
+          default: 'Хорошее обучение',
         },
       },
     },
   })
-  @ApiConsumes('multipart/form-data')
+  // @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Attendance Punch In' })
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-
-  @UseInterceptors(
-    FileFieldsInterceptor([{ name: 'video' }, { name: 'image' }]),
-  )
+  
   async create(
-    @UploadedFiles()
-    videos: { video?: Express.Multer.File; image?: Express.Multer.File },
-    @Body() createTacticVideo: CreateTacticVideosDto,
+    @Body() createTacticVideo: CreateCompetitionVideosDto,
   ) {
-    return await this.#_service.create(
-      createTacticVideo,
-      videos.video[0],
-      videos.image[0],
-    );
+    return await this.#_service.create(createTacticVideo);
   }
 
   @UseGuards(jwtGuard)
@@ -164,52 +136,34 @@ export class TacticVideosController {
           type: 'string',
           default: '1 chi darsru',
         },
-        duration: {
-          type: 'string',
-          default: '9:10m',
-        },
-        sequence: {
-          type: 'number',
-          default: 1,
-        },
-        description_tactic: {
+
+        description_video: {
           type: 'string',
           default: 'uuid23422',
         },
-        description_tactic_ru: {
+        description_video_ru: {
           type: 'string',
           default: 'Хорошее обучение',
         },
-        video: {
+        video_link: {
           type: 'string',
-          format: 'binary',
-        },
-        image: {
-          type: 'string',
-          format: 'binary',
+          default: 'Хорошее обучение',
         },
       },
     },
   })
-  @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Attendance Punch In' })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
 
-  @UseInterceptors(
-    FileFieldsInterceptor([{ name: 'video' }, { name: 'image' }]),
-  )
   async update(
     @Param('id') id: string,
-    @Body() updateTacticVideos: UpdateTacticVideosDto,
-    @UploadedFiles()
-    videos: { video?: Express.Multer.File; image?: Express.Multer.File },
+    @Body() updateTacticVideos: UpdateCompetitionVideosDto,
+  
   ) {
     await this.#_service.update(
       id,
-      updateTacticVideos,
-      videos?.video ? videos?.video[0] : null,
-      videos?.image ? videos?.image[0] : null,
+      updateTacticVideos
     );
   }
 
