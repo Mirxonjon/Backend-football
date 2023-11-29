@@ -13,7 +13,7 @@ export class UpdateCompetitionVideosDto {
   title_ru: string;
 
   @IsString()
-  @MaxLength(10)
+  @MaxLength(200)
   video_link: string;
 
   @IsString()

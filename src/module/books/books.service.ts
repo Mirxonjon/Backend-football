@@ -44,6 +44,34 @@ export class BooksServise {
     };
   }
 
+  async findAllwithCategory(id :string , pageNumber = 1, pageSize = 10 ) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await BooksEntity.findAndCount({
+      where: {
+        category_id : {
+          id: id
+        }
+      },
+      relations: {
+        category_id: true,
+      },
+      skip: offset,
+      take: pageSize,
+    });
+
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
+  }
   async findOne(id: string, header: any) {
     const user_id = false;
 

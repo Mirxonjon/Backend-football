@@ -51,6 +51,17 @@ export class BooksController {
   ) {
     return await this.#_service.findAll(pageNumber, pageSize);
   }
+  @Get('withCategory/allWithPage/:id?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findallWithpage(
+    @Param('id') id: string,
+    @Query('pageNumber') pageNumber: number,
+    @Query('pageSize') pageSize: number,
+  ) {
+    return await this.#_service.findAllwithCategory(id ,pageNumber, pageSize);
+  }
 
   @Get('/one/:id')
   @ApiBadRequestResponse()
