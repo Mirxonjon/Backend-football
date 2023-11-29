@@ -2,18 +2,14 @@ import {
   Body,
   Controller,
   Delete,
-  FileTypeValidator,
   Get,
   Headers,
   HttpCode,
   HttpStatus,
   Param,
-  ParseFilePipe,
-  ParseFilePipeBuilder,
   Patch,
   Post,
   Query,
-  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -52,6 +48,8 @@ export class ShortBooksController {
     return await this.#_service.findOne(id);
   }
 
+  
+
   @Get('/all')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -69,6 +67,35 @@ export class ShortBooksController {
     @Query('pageSize') pageSize: number,
   ) {
     return await this.#_service.findAllWithpPage(pageNumber, pageSize);
+  }
+
+  @Get('withCategory/allWithPage/:id?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findallWithpage(
+    @Param('id') id: string,
+    @Query('pageNumber') pageNumber: number,
+    @Query('pageSize') pageSize: number,
+  ) {
+    return await this.#_service.findAllwithCategory(id ,pageNumber, pageSize);
+  }
+  
+  @Get('/filter/uz?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterUz(@Query('title') title: string , @Query('pageNumber') pageNumber: number,
+  @Query('pageSize') pageSize: number) {
+    return await this.#_service.getfilterUz(title ,pageNumber ,pageSize);
+  }
+  @Get('/filter/ru?')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async getfilterRu(@Query('title') title: string ,  @Query('pageNumber') pageNumber: number,
+  @Query('pageSize') pageSize: number,) {
+    return await this.#_service.getfilterRu(title ,pageNumber , pageSize);
   }
 
   @UseGuards(jwtGuard)

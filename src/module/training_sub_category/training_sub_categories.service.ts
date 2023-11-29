@@ -120,33 +120,63 @@ export class TrainingSubCategoriesService {
     return findCategory;
   }
 
-  async getfilterUz(title: string) {
-    const filterTacticCategory = await TrainingSubCategoriesEntity.find({
+  async getfilterUz(title: string , pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await TrainingSubCategoriesEntity.findAndCount({
       where: {
         title: Like(`%${title}%`),
       },
       relations: {
         category_id: true,
       },
-    }).catch((e) => {
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
-    return filterTacticCategory;
+
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
   }
 
-  async getfilterRu(title: string) {
-    const filterTacticCategory = await TrainingSubCategoriesEntity.find({
+  async getfilterRu(title: string, pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await TrainingSubCategoriesEntity.findAndCount({
       where: {
         title_ru: Like(`%${title}%`),
       },
       relations: {
         category_id: true,
       },
-    }).catch((e) => {
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    return filterTacticCategory;
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
+    
   }
 
   async create(body: CreateTrainingSubCategoryDto) {
@@ -170,8 +200,8 @@ export class TrainingSubCategoriesService {
       .into(TrainingSubCategoriesEntity)
       .values({
         category_id: findCategory,
-        title: body.title,
-        title_ru: body.title_ru,
+        title: body.title.toLowerCase(),
+        title_ru: body.title_ru.toLowerCase(),
       })
       .execute()
       .catch(() => {
@@ -198,8 +228,8 @@ export class TrainingSubCategoriesService {
       .update(TrainingSubCategoriesEntity)
       .set({
         category_id: findCategory || findSubCategory.category_id,
-        title: body.title || findSubCategory.title,
-        title_ru: body.title_ru || findSubCategory.title_ru,
+        title: body.title.toLowerCase() || findSubCategory.title,
+        title_ru: body.title_ru.toLowerCase() || findSubCategory.title_ru,
       })
       .where({ id })
       .execute()

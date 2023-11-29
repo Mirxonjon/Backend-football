@@ -29,7 +29,9 @@ export class BooksServise {
       },
       skip: offset,
       take: pageSize,
-    });
+    }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });;
 
     const totalPages = Math.ceil(total / pageSize);
 
@@ -58,7 +60,9 @@ export class BooksServise {
       },
       skip: offset,
       take: pageSize,
-    });
+    }).catch(() => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });;
 
     const totalPages = Math.ceil(total / pageSize);
 
@@ -75,7 +79,9 @@ export class BooksServise {
   async findOne(id: string, header: any) {
     const user_id = false;
 
-    const findBook = await BooksEntity.findOneBy({ id });
+    const findBook = await BooksEntity.findOneBy({ id }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
 
     if (!findBook) {
       throw new HttpException('Video not found', HttpStatus.NOT_FOUND);
@@ -90,35 +96,66 @@ export class BooksServise {
     }
   }
 
-  async getfilterUz(title: string) {
-    const filterBookCategory = await BooksEntity.find({
+  async getfilterUz(title: string , pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await BooksEntity.findAndCount({
       where: {
         title: Like(`%${title}%`),
       },
       relations: {
         category_id: true,
       },
-    }).catch((e) => {
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    return filterBookCategory;
-  }
+    const totalPages = Math.ceil(total / pageSize);
 
-  async getfilterRu(title: string) {
-    const filterBookCategory = await BooksEntity.find({
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
+    
+  }
+  async getfilterRu(title: string , pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await BooksEntity.findAndCount({
       where: {
         title_ru: Like(`%${title}%`),
       },
       relations: {
         category_id: true,
       },
-    }).catch((e) => {
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    return filterBookCategory;
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
+    
   }
+
+
 
   async create(
     body: CreateBookDto,
@@ -167,8 +204,8 @@ export class BooksServise {
           .insert()
           .into(BooksEntity)
           .values({
-            title: body.title,
-            title_ru: body.title_ru,
+            title: body.title.toLowerCase(),
+            title_ru: body.title_ru.toLowerCase(),
             description_book: body.description_book,
             description_book_ru: body.description_book_ru,
             book_lang: body.book_lang,
@@ -244,8 +281,8 @@ export class BooksServise {
         }
 
         const updatedVideo = await BooksEntity.update(id, {
-          title: body.title || findBook.title,
-          title_ru: body.title_ru || findBook.title_ru,
+          title: body.title.toLowerCase() || findBook.title,
+          title_ru: body.title_ru.toLowerCase() || findBook.title_ru,
           description_book: body.description_book || findBook.description_book,
           description_book_ru:
             body.description_book_ru || findBook.description_book_ru,

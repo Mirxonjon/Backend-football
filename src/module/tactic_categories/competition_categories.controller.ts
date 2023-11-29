@@ -52,16 +52,18 @@ export class CompetitionCategoriesController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async getfilterUz(@Query('title') title: string) {
-    return await this.#_service.getfilterUz(title);
+  async getfilterUz(@Query('title') title: string , @Query('pageNumber') pageNumber: number,
+  @Query('pageSize') pageSize: number) {
+    return await this.#_service.getfilterUz(title ,pageNumber ,pageSize);
   }
 
   @Get('/filter/ru?')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async getfilterRu(@Query('title') title: string) {
-    return await this.#_service.getfilterRu(title);
+  async getfilterRu(@Query('title') title: string ,  @Query('pageNumber') pageNumber: number,
+  @Query('pageSize') pageSize: number,) {
+    return await this.#_service.getfilterRu(title ,pageNumber , pageSize);
   }
 
   @Get('/one/:id')

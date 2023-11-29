@@ -67,34 +67,62 @@ export class MasterClassCategoryServise {
     };
   }
 
-  async getfilterUz(title: string) {
-    const filterCategory = await MasterclassCategoryEntity.find({
+  async getfilterUz(title: string , pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await MasterclassCategoryEntity.findAndCount({
       where: {
         title: Like(`%${title}%`),
       },
       relations: {
         MasterclassVideos: true,
       },
-    }).catch((e) => {
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    return filterCategory;
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
   }
 
-  async getfilterRu(title: string) {
-    const filterCategory = await MasterclassCategoryEntity.find({
+  async getfilterRu(title: string ,   pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await MasterclassCategoryEntity.findAndCount({
       where: {
         title_ru: Like(`%${title}%`),
       },
       relations: {
         MasterclassVideos: true,
       },
-    }).catch((e) => {
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    return filterCategory;
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
   }
 
   async create(body: CreateMasterClassCategoryDto, image: Express.Multer.File) {
@@ -113,8 +141,8 @@ export class MasterClassCategoryServise {
         .insert()
         .into(MasterclassCategoryEntity)
         .values({
-          title: body.title,
-          title_ru: body.title_ru,
+          title: body.title.toLowerCase(),
+          title_ru: body.title_ru.toLowerCase(),
           title_descrioption: body.title_descrioption,
           title_descrioption_ru: body.title_descrioption_ru,
           img_link: linkImage,
@@ -163,8 +191,8 @@ export class MasterClassCategoryServise {
       }
 
       await MasterclassCategoryEntity.update(id, {
-        title: body.title || findMasterClass.title,
-        title_ru: body.title_ru || findMasterClass.title_ru,
+        title: body.title.toLowerCase() || findMasterClass.title,
+        title_ru: body.title_ru.toLowerCase() || findMasterClass.title_ru,
         title_descrioption:
           body.title_descrioption || findMasterClass.title_descrioption,
         title_descrioption_ru:

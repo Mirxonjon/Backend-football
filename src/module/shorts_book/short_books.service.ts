@@ -1,18 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateShortBookDto } from './dto/create_book.dto';
-import { TrainingCategoriesEntity } from 'src/entities/training_Categories.entity';
 import { extname } from 'path';
 import { deleteFileCloud, googleCloud } from 'src/utils/google_cloud';
-import { TrainingVideosEntity } from 'src/entities/training_Videos.entity';
 import { UpdateShortBookDto } from './dto/update_book.dto';
 import {
   allowedBookFormats,
   allowedImageFormats,
-  allowedVideoFormats,
 } from 'src/utils/videoAndImageFormat';
 
 import { ShortBookCategoriesEntity } from 'src/entities/short_book_Categories.entity';
 import { ShortBooksEntity } from 'src/entities/short_books.entity';
+import { Like } from 'typeorm';
 
 @Injectable()
 export class ShortBooksServise {
@@ -45,6 +43,98 @@ export class ShortBooksServise {
         totalItems: total,
       },
     };
+  }
+
+  async findAllwithCategory(id :string , pageNumber = 1, pageSize = 10 ) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await ShortBooksEntity.findAndCount({
+      where: {
+        category_id : {
+          id: id
+        }
+      },
+      relations: {
+        category_id: true,
+      },
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });;
+  
+
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
+  }
+
+
+  async getfilterUz(title: string , pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await ShortBooksEntity.findAndCount({
+      where: {
+        title: Like(`%${title}%`),
+      },
+      relations: {
+        category_id: true,
+      },
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
+    
+  }
+  async getfilterRu(title: string , pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await ShortBooksEntity.findAndCount({
+      where: {
+        title_ru: Like(`%${title}%`),
+      },
+      relations: {
+        category_id: true,
+      },
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
+    
   }
 
   async findAll() {
@@ -99,8 +189,8 @@ export class ShortBooksServise {
           .insert()
           .into(ShortBooksEntity)
           .values({
-            title: body.title,
-            title_ru: body.title_ru,
+            title: body.title.toLowerCase() ,
+            title_ru: body.title_ru.toLowerCase(),
             description_book: body.description_book,
             description_book_ru: body.description_book_ru,
             short_book_lang: body.short_book_lang,
@@ -173,8 +263,8 @@ export class ShortBooksServise {
         }
 
         const updated = await ShortBooksEntity.update(id, {
-          title: body.title || findBook.title,
-          title_ru: body.title_ru || findBook.title_ru,
+          title: body.title.toLowerCase() || findBook.title,
+          title_ru: body.title_ru.toLowerCase() || findBook.title_ru,
           description_book: body.description_book || findBook.description_book,
           description_book_ru:
             body.description_book_ru || findBook.description_book_ru,

@@ -9,28 +9,57 @@ import { Like } from 'typeorm';
 // import soapRequest from 'easy-soap-request'
 @Injectable()
 export class CompetitionCategoriesService {
-  async getfilterUz(title: string) {
-    const filterTacticCategory = await CompetitionCategoriesEntity.find({
+  async getfilterUz(title: string , pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await CompetitionCategoriesEntity.findAndCount({
       where: {
         title: Like(`%${title}%`),
       },
-    }).catch((e) => {
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    return filterTacticCategory;
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
   }
 
-  async getfilterRu(title: string) {
-    const filterTacticCategory = await CompetitionCategoriesEntity.find({
+  async getfilterRu(title: string, pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await CompetitionCategoriesEntity.findAndCount({
       where: {
         title_ru: Like(`%${title}%`),
       },
-    }).catch((e) => {
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    return filterTacticCategory;
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
+   
   }
 
   async getall() {
@@ -112,8 +141,8 @@ export class CompetitionCategoriesService {
         .insert()
         .into(CompetitionCategoriesEntity)
         .values({
-          title: body.title,
-          title_ru: body.title_ru,
+          title: body.title.toLowerCase(),
+          title_ru: body.title_ru.toLowerCase(),
           image: link,
         })
         .execute()
@@ -167,8 +196,8 @@ export class CompetitionCategoriesService {
       await CompetitionCategoriesEntity.createQueryBuilder()
         .update(CompetitionCategoriesEntity)
         .set({
-          title: body.title || findCategory.title,
-          title_ru: body.title_ru || findCategory.title_ru,
+          title: body.title.toLowerCase() || findCategory.title,
+          title_ru: body.title_ru.toLowerCase() || findCategory.title_ru,
           image: link || findCategory.image,
         })
         .where({ id })

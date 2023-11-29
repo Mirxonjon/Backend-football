@@ -168,8 +168,8 @@ export class TrainingCategoriesService {
         .insert()
         .into(TrainingCategoriesEntity)
         .values({
-          title: body.title,
-          title_ru: body.title_ru,
+          title: body.title.toLowerCase(),
+          title_ru: body.title_ru.toLowerCase(),
           traning_for_age: body.traning_for_age,
           description_training: body.description_training,
           description_training_ru: body.description_training_ru,
@@ -190,28 +190,56 @@ export class TrainingCategoriesService {
     }
   }
 
-  async getfilterUz(title: string) {
-    const filterTacticCategory = await TrainingCategoriesEntity.find({
+  async getfilterUz(title: string, pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await TrainingCategoriesEntity.findAndCount({
       where: {
         title: Like(`%${title}%`),
       },
-    }).catch((e) => {
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    return filterTacticCategory;
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
   }
 
-  async getfilterRu(title: string) {
-    const filterTacticCategory = await TrainingCategoriesEntity.find({
+  async getfilterRu(title: string, pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await TrainingCategoriesEntity.findAndCount({
       where: {
         title_ru: Like(`%${title}%`),
       },
-    }).catch((e) => {
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    return filterTacticCategory;
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
   }
 
   async update(
@@ -250,8 +278,8 @@ export class TrainingCategoriesService {
       await TrainingCategoriesEntity.createQueryBuilder()
         .update(TrainingCategoriesEntity)
         .set({
-          title: body.title || findCategory.title,
-          title_ru: body.title_ru || findCategory.title_ru,
+          title: body.title.toLowerCase() || findCategory.title,
+          title_ru: body.title_ru.toLowerCase() || findCategory.title_ru,
           traning_for_age: body.traning_for_age || findCategory.traning_for_age,
           description_training:
             body.description_training || findCategory.description_training,

@@ -142,34 +142,62 @@ export class TrainingVideosServise {
     }
   }
 
-  async getfilterUz(title: string) {
-    const filterTacticCategory = await TrainingVideosEntity.find({
-      where: {
-        title: Like(`%${title}%`),
-      },
-      relations: {
-        sub_Category_id: true,
-      },
-    }).catch((e) => {
-      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-    });
-
-    return filterTacticCategory;
+  async getfilterUz(title: string , pageNumber = 1, pageSize = 10 ) {
+      const offset = (pageNumber - 1) * pageSize;
+  
+      const [results, total] = await TrainingVideosEntity.findAndCount({
+        where: {
+          title: Like(`%${title}%`),
+        },
+        relations: {
+          sub_Category_id: true,
+        },
+        skip: offset,
+        take: pageSize,
+      }).catch(() => {
+        throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+      });
+  
+      const totalPages = Math.ceil(total / pageSize);
+  
+      return {
+        results,
+        pagination: {
+          currentPage: pageNumber,
+          totalPages,
+          pageSize,
+          totalItems: total,
+        },
+      };
   }
 
-  async getfilterRu(title: string) {
-    const filterTacticCategory = await TrainingVideosEntity.find({
+  async getfilterRu(title: string , pageNumber = 1, pageSize = 10) {
+    const offset = (pageNumber - 1) * pageSize;
+
+    const [results, total] = await TrainingVideosEntity.findAndCount({
       where: {
         title_ru: Like(`%${title}%`),
       },
       relations: {
         sub_Category_id: true,
       },
-    }).catch((e) => {
+      skip: offset,
+      take: pageSize,
+    }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
 
-    return filterTacticCategory;
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      results,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        pageSize,
+        totalItems: total,
+      },
+    };
   }
 
   async create(
@@ -216,8 +244,8 @@ export class TrainingVideosServise {
           .insert()
           .into(TrainingVideosEntity)
           .values({
-            title: body.title,
-            title_ru: body.title_ru,
+            title: body.title.toLowerCase(),
+            title_ru: body.title_ru.toLowerCase(),
             duration: body.duration,
             sequence: +body.sequence,
             description_tactic: body.description_tactic,
@@ -296,8 +324,8 @@ export class TrainingVideosServise {
         }
 
         const updatedVideo = await TrainingVideosEntity.update(id, {
-          title: body.title || findVideo.title,
-          title_ru: body.title_ru || findVideo.title_ru,
+          title: body.title.toLowerCase()|| findVideo.title,
+          title_ru: body.title_ru.toLowerCase() || findVideo.title_ru,
           duration: body.duration || findVideo.duration,
           sequence: body.sequence || findVideo.sequence,
           description_tactic:

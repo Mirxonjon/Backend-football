@@ -91,8 +91,8 @@ export class BooksCategoriesService {
       .insert()
       .into(BooksCategoriesEntity)
       .values({
-        title: body.title,
-        title_ru: body.title_ru,
+        title: body.title.toLowerCase(),
+        title_ru: body.title_ru.toLowerCase(),
       })
       .execute()
       .catch(() => {
@@ -117,8 +117,8 @@ export class BooksCategoriesService {
     await BooksCategoriesEntity.createQueryBuilder()
       .update(BooksCategoriesEntity)
       .set({
-        title: body.title || findCategory.title,
-        title_ru: body.title_ru || findCategory.title_ru,
+        title: body.title.toLowerCase() || findCategory.title,
+        title_ru: body.title_ru.toLowerCase() || findCategory.title_ru,
       })
       .where({ id })
       .execute()
