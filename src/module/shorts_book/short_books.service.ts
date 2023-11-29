@@ -11,17 +11,38 @@ import {
 import { ShortBookCategoriesEntity } from 'src/entities/short_book_Categories.entity';
 import { ShortBooksEntity } from 'src/entities/short_books.entity';
 import { Like } from 'typeorm';
+import { AuthServise } from '../auth/auth.service';
+import { CustomHeaders } from 'src/types';
 
 @Injectable()
 export class ShortBooksServise {
-  async findOne(id: string) {
-    const findBook = await ShortBooksEntity.findOneBy({ id });
-
-    if (!findBook) {
-      throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
+  readonly #_authService: AuthServise;
+  constructor(authService: AuthServise) {
+    this.#_authService = authService;
+  }
+  async findOne(id: string ,header : CustomHeaders ) {
+    const findShortBook = await ShortBooksEntity.findOneBy({ id }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });
+    if (!findShortBook) {
+      throw new HttpException('short book not found', HttpStatus.NOT_FOUND);
     }
 
-    return findBook;
+    if (header.access_token) {
+      const user = await this.#_authService.verify(header.access_token);
+      if (user.id) {
+        return {
+          follow: 'true',
+          findShortBook
+        };
+      }
+    } else {
+      findShortBook.short_book_link = `fdsfahbs${findShortBook.short_book_link}jgfjhfgjhf`;
+      return {
+        follow: 'false',
+        findShortBook
+      };
+    }
   }
 
   async findAllWithpPage(pageNumber = 1, pageSize = 10) {

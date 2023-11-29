@@ -20,6 +20,7 @@ import {
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
+  ApiHeader,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -44,8 +45,13 @@ export class ShortBooksController {
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async findOne(@Param('id') id: string) {
-    return await this.#_service.findOne(id);
+  @ApiHeader({
+    name: 'autharization',
+    description: 'User token',
+    required: false,
+  })
+  async findOne(@Param('id') id: string , @Headers() header: any) {
+    return await this.#_service.findOne(id, header);
   }
 
   

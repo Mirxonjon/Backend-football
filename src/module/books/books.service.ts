@@ -13,13 +13,18 @@ import {
   allowedBookFormats,
   allowedImageFormats,
 } from 'src/utils/videoAndImageFormat';
-
 import { BooksEntity } from 'src/entities/books.entity';
 import { BooksCategoriesEntity } from 'src/entities/books_Categories.entity';
 import { Like } from 'typeorm';
+import { AuthServise } from '../auth/auth.service';
+import { CustomHeaders } from 'src/types';
 
 @Injectable()
 export class BooksServise {
+  readonly #_authService: AuthServise;
+  constructor(authService: AuthServise) {
+    this.#_authService = authService;
+  }
   async findAll(pageNumber = 1, pageSize = 10) {
     const offset = (pageNumber - 1) * pageSize;
 
@@ -76,23 +81,29 @@ export class BooksServise {
       },
     };
   }
-  async findOne(id: string, header: any) {
-    const user_id = false;
+  async findOne(id: string, header: CustomHeaders) {
 
     const findBook = await BooksEntity.findOneBy({ id }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
-
     if (!findBook) {
-      throw new HttpException('Video not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
     }
 
-    if (user_id) {
-      return findBook;
+    if (header.access_token) {
+      const user = await this.#_authService.verify(header.access_token);
+      if (user.id) {
+        return {
+          follow: 'true',
+          findBook
+        };
+      }
     } else {
-      findBook.book_link = `fdsfahbs${findBook.book_link}`;
-
-      return findBook;
+      findBook.book_link = `fdsfahbs${findBook.book_link}jgfjhfgjhf`;
+      return {
+        follow: 'false',
+        findBook
+      };
     }
   }
 
