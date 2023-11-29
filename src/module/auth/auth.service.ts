@@ -61,7 +61,6 @@ export class AuthServise {
     }).catch((e) => {
       throw new HttpException('Bad Request ', HttpStatus.BAD_REQUEST);
     });
-    console.log(finduser);
 
     if (!finduser) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);

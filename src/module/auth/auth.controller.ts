@@ -48,7 +48,7 @@ export class AuthController {
     return this.service.createUser(body);
   }
   @Post('/signIn')
-  @HttpCode(HttpStatus.FOUND)
+  @HttpCode(HttpStatus.OK)
   @ApiBody({
     schema: {
       type: 'object',
