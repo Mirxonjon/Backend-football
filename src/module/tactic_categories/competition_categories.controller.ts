@@ -136,10 +136,6 @@ export class CompetitionCategoriesController {
           type: 'string',
           default: 'Развитие технологий',
         },
-        tactic_category: {
-          type: 'string',
-          default: '9-10',
-        },
         image: {
           type: 'string',
           format: 'binary',
