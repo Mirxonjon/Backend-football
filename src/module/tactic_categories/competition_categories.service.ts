@@ -198,6 +198,7 @@ export class CompetitionCategoriesService {
         .set({
           title: body.title.toLowerCase() || findCategory.title,
           title_ru: body.title_ru.toLowerCase() || findCategory.title_ru,
+          
           image: link || findCategory.image,
         })
         .where({ id })

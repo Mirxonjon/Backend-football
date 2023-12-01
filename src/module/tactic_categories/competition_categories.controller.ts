@@ -91,7 +91,7 @@ export class CompetitionCategoriesController {
   @ApiBody({
     schema: {
       type: 'object',
-      required: ['title', 'title_ru', 'tactic_category', 'image'],
+      required: ['title', 'title_ru', 'image'],
       properties: {
         title: {
           type: 'string',
@@ -100,10 +100,6 @@ export class CompetitionCategoriesController {
         title_ru: {
           type: 'string',
           default: 'Развитие технологий',
-        },
-        tactic_category: {
-          type: 'string',
-          default: '9-10',
         },
         image: {
           type: 'string',
