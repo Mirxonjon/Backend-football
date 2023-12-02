@@ -25,6 +25,22 @@ export class BooksServise {
   constructor(authService: AuthServise) {
     this.#_authService = authService;
   }
+  async findAllBooks() {
+
+    const allbooks = await BooksEntity.findAndCount({
+      relations: {
+        category_id: true,
+      },
+      order: {
+        create_data : 'desc'
+      }
+    }).catch((e) => {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    });;
+
+    return allbooks
+  }
+
   async findAll(pageNumber = 1, pageSize = 10) {
     const offset = (pageNumber - 1) * pageSize;
 

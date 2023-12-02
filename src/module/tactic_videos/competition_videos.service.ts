@@ -9,7 +9,11 @@ import { CompetitionVideosEntity } from 'src/entities/competition_Videos.entity'
 @Injectable()
 export class CompetitionVideosServise {
   async getall() {
-    const findVideos = await CompetitionVideosEntity.find().catch((e) => {
+    const findVideos = await CompetitionVideosEntity.find({
+      relations:{
+        category_id: true
+      }
+    }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
     if (!findVideos) {
@@ -57,6 +61,7 @@ export class CompetitionVideosServise {
       where: {
         id: body.tactic_id,
       },
+      
     }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     });
@@ -94,7 +99,7 @@ export class CompetitionVideosServise {
 
     const findCategory = await CompetitionCategoriesEntity.findOne({
       where: {
-        id: body.tactic_id,
+        id: body.tactic_id == null ? findVideo.category_id.id : body.tactic_id,
       },
     }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);

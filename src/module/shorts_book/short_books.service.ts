@@ -159,7 +159,14 @@ export class ShortBooksServise {
   }
 
   async findAll() {
-    const findBooks = await ShortBooksEntity.find();
+    const findBooks = await ShortBooksEntity.find({
+      relations: {
+        category_id :true
+      },
+      order:{
+        create_data :'desc'
+      }
+    });
 
     if (!findBooks) {
       throw new HttpException('Books not found', HttpStatus.NOT_FOUND);
