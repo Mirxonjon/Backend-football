@@ -47,10 +47,8 @@ export class BooksController {
   @ApiNotFoundResponse()
   @ApiOkResponse()
   async findall(
-    @Query('pageNumber') pageNumber: number,
-    @Query('pageSize') pageSize: number,
   ) {
-    return await this.#_service.findAll(pageNumber, pageSize);
+    return await this.#_service.findAllBooks();
   }
 
   @Get('/allWithPage?')
