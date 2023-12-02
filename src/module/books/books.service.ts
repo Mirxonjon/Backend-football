@@ -27,7 +27,7 @@ export class BooksServise {
   }
   async findAllBooks() {
 
-    const allbooks = await BooksEntity.findAndCount({
+    const allbooks = await BooksEntity.find({
       relations: {
         category_id: true,
       },
@@ -36,7 +36,7 @@ export class BooksServise {
       }
     }).catch((e) => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
-    });;
+    });
 
     return allbooks
   }
