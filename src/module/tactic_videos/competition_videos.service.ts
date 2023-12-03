@@ -99,7 +99,7 @@ export class CompetitionVideosServise {
 
     const findCategory = await CompetitionCategoriesEntity.findOne({
       where: {
-        id: body.tactic_id == null ? findVideo.category_id.id : body.tactic_id,
+        id: body.tactic_id == 'null' ? findVideo.category_id.id : body.tactic_id,
       },
     }).catch(() => {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);

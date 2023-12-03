@@ -221,7 +221,7 @@ export class TrainingSubCategoriesService {
     }
 
     const findCategory = await TrainingCategoriesEntity.findOneBy({
-      id: body.category_id == null ? findSubCategory.category_id.id : body.category_id,
+      id: body.category_id == 'null' ? findSubCategory.category_id.id : body.category_id,
     });
 
     await TrainingSubCategoriesEntity.createQueryBuilder()

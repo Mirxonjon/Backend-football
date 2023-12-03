@@ -306,7 +306,8 @@ export class BooksServise {
           await deleteFileCloud(book_link);
           book_link = googleCloud(book);
         }
-
+        
+        
         const updatedVideo = await BooksEntity.update(id, {
           title: body.title.toLowerCase() || findBook.title,
           title_ru: body.title_ru.toLowerCase() || findBook.title_ru,
@@ -316,8 +317,8 @@ export class BooksServise {
           book_lang: body.book_lang || findBook.book_lang,
           book_img,
           book_link,
-          category_id: body.category_id || (findBook.category_id.id as any),
-        });
+          category_id: body.category_id == 'null' ?  (findBook.category_id.id as any) : body.category_id,
+        })
 
         return updatedVideo;
       } else {

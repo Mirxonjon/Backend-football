@@ -184,7 +184,7 @@ export class MasterClassVideoServise {
     const category_id: string = findVideo.category_id.id;
 
     const findMasterClass = await MasterclassCategoryEntity.findOneBy({
-      id: body.category_id  == null ? findVideo.category_id.id : body.category_id,
+      id: body.category_id  == 'null' ? findVideo.category_id.id : body.category_id,
     });
     console.log(findMasterClass);
 
