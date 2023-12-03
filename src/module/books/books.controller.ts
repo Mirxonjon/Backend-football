@@ -81,7 +81,7 @@ export class BooksController {
   @ApiNotFoundResponse()
   @ApiOkResponse()
   @ApiHeader({
-    name: 'autharization',
+    name: 'access_token',
     description: 'User token',
     required: false,
   })

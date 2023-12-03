@@ -299,7 +299,7 @@ export class ShortBooksServise {
           short_book_lang: body.short_book_lang || findBook.short_book_lang,
           short_book_img: book_img,
           short_book_link: book_link,
-          category_id: body.category_id || (findBook.category_id.id as any),
+          category_id: body.category_id == 'null' ?  (findBook.category_id.id as any) : body.category_id,
         });
 
         return updated;
