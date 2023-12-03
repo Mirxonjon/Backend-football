@@ -108,6 +108,8 @@ export class BooksServise {
 
     if (header.access_token) {
       const user = await this.#_authService.verify(header.access_token);
+      console.log(user);
+      
       if (user.id) {
         return {
           follow: 'true',
