@@ -105,6 +105,7 @@ export class BooksServise {
     if (!findBook) {
       throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
     }
+console.log(header.access_token);
 
     if (header.access_token) {
       const user = await this.#_authService.verify(header.access_token);
