@@ -29,13 +29,13 @@ export class ShortBooksServise {
     }
     console.log(findShortBook);
 
-    console.log(header);
+    console.log(header.access_token);
     
     if (header.access_token) {
       const user = await this.#_authService.verify(header.access_token);
       console.log(user);
       
-      if (user.id) {
+      if (user) {
         return {
           follow: 'true',
           findShortBook

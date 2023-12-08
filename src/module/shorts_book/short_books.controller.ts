@@ -32,6 +32,7 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CreateShortBookDto } from './dto/create_book.dto';
 import { UpdateShortBookDto } from './dto/update_book.dto';
 import { jwtGuard } from '../auth/guards/jwt.guard';
+import { CustomHeaders } from 'src/types';
 @Controller('ShortBooks')
 @ApiTags('Short Books')
 @ApiBearerAuth('JWT-auth')
@@ -50,7 +51,9 @@ export class ShortBooksController {
     description: 'User token',
     required: false,
   })
-  async findOne(@Param('id') id: string , @Headers() header: any) {
+  async findOne(@Param('id') id: string , @Headers() header: CustomHeaders) {
+    console.log(header.access_token);
+    
     return await this.#_service.findOne(id, header);
   }
 
