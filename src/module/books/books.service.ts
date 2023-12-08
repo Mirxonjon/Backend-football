@@ -275,7 +275,7 @@ console.log(header.access_token);
     });
 
     if (!findBook) {
-      throw new HttpException('Video not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
     }
 
     let formatImage: string = 'Not image';
