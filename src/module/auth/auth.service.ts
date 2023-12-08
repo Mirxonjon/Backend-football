@@ -45,7 +45,6 @@ export class AuthServise {
       .catch((e) => {
         throw new HttpException('Bad Request ', HttpStatus.BAD_REQUEST);
       });
-    console.log(addedUser);
 
     return {
       message: 'You have successfully registered',

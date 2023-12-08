@@ -105,11 +105,9 @@ export class BooksServise {
     if (!findBook) {
       throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
     }
-console.log(header.access_token);
 
     if (header.access_token) {
       const user = await this.#_authService.verify(header.access_token);
-      console.log(user);
       
       if (user.id) {
         return {
@@ -204,7 +202,6 @@ console.log(header.access_token);
         HttpStatus.NO_CONTENT,
       );
     }
-    // console.log(body.tactic_id);
 
     const findCategory = await BooksCategoriesEntity.findOne({
       where: {
@@ -245,8 +242,6 @@ console.log(header.access_token);
           })
           .execute()
           .catch((e) => {
-            console.log(e);
-
             throw new HttpException('Bad Request ', HttpStatus.BAD_REQUEST);
           });
       } else {

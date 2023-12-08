@@ -20,7 +20,6 @@ export class jwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(req: CustomRequest, payload: any) {
-    console.log(payload);
 
     const findAdmin = await UsersEntity.findOne({
       where: {
@@ -28,7 +27,6 @@ export class jwtStrategy extends PassportStrategy(Strategy) {
         role: 'admin',
       },
     });
-    console.log(findAdmin);
 
     if (!findAdmin) {
       throw new HttpException('You  are not admin', HttpStatus.NOT_FOUND);

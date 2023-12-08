@@ -131,7 +131,6 @@ export class MasterClassVideoServise {
       if (allowedVideoFormats.includes(formatVideo)) {
         const linkVideo = googleCloud(video);
         const linkImage = googleCloud(image);
-        console.log(linkVideo, linkImage);
 
         await MasterclassVideosEntity.createQueryBuilder()
           .insert()
@@ -149,7 +148,6 @@ export class MasterClassVideoServise {
           })
           .execute()
           .catch((e) => {
-            console.log(e);
 
             throw new HttpException('Bad Request ', HttpStatus.BAD_REQUEST);
           });
@@ -186,8 +184,6 @@ export class MasterClassVideoServise {
     const findMasterClass = await MasterclassCategoryEntity.findOneBy({
       id: body.category_id  == 'null' ? findVideo.category_id.id : body.category_id,
     });
-    console.log(findMasterClass);
-
     // if (!findMasterClass) {
     //   throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
     // }

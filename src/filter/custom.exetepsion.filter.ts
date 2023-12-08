@@ -11,7 +11,6 @@ export class ErrorHandle implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const status = exception?.status;
-    console.log(exception);
 
     if (exception instanceof HttpException) {
       response.status(status).json(exception);

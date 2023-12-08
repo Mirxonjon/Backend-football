@@ -183,7 +183,6 @@ export class MasterClassCategoryServise {
       formatImage === 'Not image'
     ) {
       let img_link = findMasterClass.img_link;
-      console.log(img_link);
 
       if (formatImage !== 'Not image') {
         await deleteFileCloud(img_link);

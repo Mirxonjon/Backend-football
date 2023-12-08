@@ -178,7 +178,6 @@ export class MasterClassCategoryController {
     @UploadedFiles()
     files: { image?: Express.Multer.File },
   ) {
-    console.log(files);
 
     await this.#_service.update(
       id,

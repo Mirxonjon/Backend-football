@@ -256,7 +256,6 @@ export class TrainingVideosServise {
           })
           .execute()
           .catch((e) => {
-            console.log(e);
 
             throw new HttpException('Bad Request ', HttpStatus.BAD_REQUEST);
           });
@@ -362,7 +361,6 @@ export class TrainingVideosServise {
 
     const imageLink = await deleteFileCloud(findVideo?.tactic_img);
     const videoLink = await deleteFileCloud(findVideo?.video_link);
-    console.log(imageLink, videoLink);
 
     if (!imageLink) {
       throw new HttpException(
@@ -377,7 +375,6 @@ export class TrainingVideosServise {
         HttpStatus.NOT_FOUND,
       );
     }
-    console.log(findVideo);
 
     await TrainingVideosEntity.delete({ id });
   }
