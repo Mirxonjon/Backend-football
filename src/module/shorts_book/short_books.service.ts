@@ -27,9 +27,9 @@ export class ShortBooksServise {
     if (!findShortBook) {
       throw new HttpException('short book not found', HttpStatus.NOT_FOUND);
     }
-    console.log(findShortBook);
+    // console.log(findShortBook);
 
-    console.log(header.access_token);
+    console.log(header ,'22222222222');
     
     if (header.access_token) {
       const user = await this.#_authService.verify(header.access_token);
