@@ -39,7 +39,7 @@ export class TrainingSubCategoriesService {
   }
 
   async findOne(id: string, header: CustomHeaders) {
-    const findSubCategory: any = await TrainingSubCategoriesEntity.findOne({
+    const findSubCategory: any = await TrainingSubCategoriesEntity.find({
       where: {
         id: id,
       },
