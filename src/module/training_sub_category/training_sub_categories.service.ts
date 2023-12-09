@@ -78,7 +78,7 @@ export class TrainingSubCategoriesService {
         return findSubCategory[0];
       } else {
         for (let i: number = 0; i < allCourseVideos.length; i++) {
-          if ((i) => 2) {
+          if (i >= 2) {
             allCourseVideos[i].active = false;
             allCourseVideos[i].video_link.split();
             allCourseVideos[i].link = allCourseVideos[i].video_link
@@ -95,7 +95,9 @@ export class TrainingSubCategoriesService {
       }
     } else {
       for (let i: number = 0; i < allCourseVideos.length; i++) {
-        if ((i) => 2) {
+        
+        console.log(i , i > 2 );
+        if (i >= 2) {
           allCourseVideos[i].active = false;
           allCourseVideos[i].video_link.split();
           allCourseVideos[i].link = allCourseVideos[i].video_link
