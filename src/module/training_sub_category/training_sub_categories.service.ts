@@ -61,6 +61,10 @@ export class TrainingSubCategoriesService {
           sequence: true,
           title: true,
           title_ru: true,
+          description_tactic:true,
+          description_tactic_ru:true,
+          tactic_img:true
+
         },
       },
     });
