@@ -32,7 +32,7 @@ export class ShortBooksServise {
     console.log(header ,'22222222222');
     
     if (header.authorization) {
-      const user = await this.#_authService.verify(header.authorization);
+      const user = await this.#_authService.verify(header.authorization.split(' ')[1]);
       console.log(user);
       
       if (user) {
