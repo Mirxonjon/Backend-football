@@ -60,7 +60,7 @@ export class TrainingSubCategoriesController {
   @ApiNotFoundResponse()
   @ApiOkResponse()
   @ApiHeader({
-    name: 'access_token',
+    name: 'authorization',
     description: 'UserToken token',
     required: false,
   })

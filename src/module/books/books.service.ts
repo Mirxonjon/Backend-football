@@ -106,8 +106,8 @@ export class BooksServise {
       throw new HttpException('Book not found', HttpStatus.NOT_FOUND);
     }
 
-    if (header.access_token) {
-      const user = await this.#_authService.verify(header.access_token);
+    if (header.authorization) {
+      const user = await this.#_authService.verify(header.authorization.split(' ')[1]);
       
       if (user.id) {
         return {

@@ -63,8 +63,8 @@ export class TrainingSubCategoriesService {
     });
     let allCourseVideos = [...findSubCategory.Training_videos];
 
-    if (header.access_token) {
-      const user = await this.#_authService.verify(header.access_token);
+    if (header.authorization) {
+      const user = await this.#_authService.verify(header.authorization.split(' ')[1]);
 
       if (user.id) {
         for (let i: number = 0; i < allCourseVideos.length; i++) {

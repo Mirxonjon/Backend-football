@@ -6,6 +6,6 @@ export interface CustomRequest extends Request {
 }
 
 export interface CustomHeaders extends Headers {
-  access_token: string;
+
   authorization: string;
 }

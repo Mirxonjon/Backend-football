@@ -127,8 +127,8 @@ export class TrainingVideosServise {
 
     if (openVideosSequance.includes(findVideo.sequence)) {
       return findVideo;
-    } else if (header.access_token) {
-      const data = this.#_auth.verify(header.access_token);
+    } else if (header.authorization) {
+      const data = this.#_auth.verify(header.authorization.split(' ')[1]);
 
       if (data) {
         return findVideo;

@@ -6,6 +6,7 @@ import { allowedImageFormats } from 'src/utils/videoAndImageFormat';
 import { UsersEntity } from 'src/entities/users.entity';
 import { AddAdminDto } from './dto/add-admin.dto';
 import { AuthServise } from '../auth/auth.service';
+import { CustomHeaders } from 'src/types';
 
 @Injectable()
 export class UsersServise {
@@ -13,9 +14,9 @@ export class UsersServise {
   constructor(authService: AuthServise) {
     this.#_authService = authService;
   }
-  async findOne(header: any) {
-    if (header.access_token) {
-      const user = await this.#_authService.verify(header.access_token);
+  async findOne(header: CustomHeaders) {
+    if (header.authorization) {
+      const user = await this.#_authService.verify(header.authorization.split(' ')[1]);
       const findUser = await UsersEntity.findOneBy({ id: user.id });
       if (!findUser) {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);

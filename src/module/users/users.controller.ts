@@ -44,7 +44,7 @@ export class UsersController {
   @ApiNotFoundResponse()
   @ApiOkResponse()
   @ApiHeader({
-    name: 'access_token',
+    name: 'authorization',
     description: 'User Token',
     required: false,
   })

@@ -35,7 +35,7 @@ export class ShortBooksServise {
       const user = await this.#_authService.verify(header.authorization.split(' ')[1]);
       console.log(user);
       
-      if (user) {
+      if (user.id) {
         return {
           follow: 'true',
           findShortBook
