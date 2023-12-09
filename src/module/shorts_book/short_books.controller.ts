@@ -52,7 +52,6 @@ export class ShortBooksController {
     required: false,
   })
   async findOne(@Param('id') id: string , @Headers() header: CustomHeaders) {
-    console.log(header.authorization);
     
     return await this.#_service.findOne(id, header);
   }
