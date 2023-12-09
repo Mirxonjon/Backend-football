@@ -47,12 +47,12 @@ export class ShortBooksController {
   @ApiNotFoundResponse()
   @ApiOkResponse()
   @ApiHeader({
-    name: 'access_token',
+    name: 'authorization',
     description: 'User token',
     required: false,
   })
   async findOne(@Param('id') id: string , @Headers() header: CustomHeaders) {
-    console.log(header.access_token);
+    console.log(header.authorization);
     
     return await this.#_service.findOne(id, header);
   }

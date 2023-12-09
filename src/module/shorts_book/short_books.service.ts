@@ -31,8 +31,8 @@ export class ShortBooksServise {
 
     console.log(header ,'22222222222');
     
-    if (header.access_token) {
-      const user = await this.#_authService.verify(header.access_token);
+    if (header.authorization) {
+      const user = await this.#_authService.verify(header.authorization);
       console.log(user);
       
       if (user) {
