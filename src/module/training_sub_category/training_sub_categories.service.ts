@@ -39,6 +39,8 @@ export class TrainingSubCategoriesService {
   }
 
   async findOne(id: string, header: CustomHeaders) {
+    console.log(id ,header.authorization);
+    
     const findSubCategory: any = await TrainingSubCategoriesEntity.find({
       where: {
         id: id,
@@ -61,7 +63,8 @@ export class TrainingSubCategoriesService {
         },
       },
     });
-    let allCourseVideos = [...findSubCategory.Training_videos];
+    console.log(findSubCategory[0], findSubCategory[0].Training_videos);
+    let allCourseVideos = [...findSubCategory[0].Training_videos];
 
     if (header.authorization) {
       const user = await this.#_authService.verify(header.authorization.split(' ')[1]);
@@ -71,8 +74,8 @@ export class TrainingSubCategoriesService {
           allCourseVideos[i].active = true;
           allCourseVideos[i].link = allCourseVideos[i].video_link;
         }
-        findSubCategory.Training_videos = allCourseVideos;
-        return findSubCategory;
+        findSubCategory[0].Training_videos = allCourseVideos;
+        return findSubCategory[0];
       } else {
         for (let i: number = 0; i < allCourseVideos.length; i++) {
           if ((i) => 2) {
@@ -87,8 +90,8 @@ export class TrainingSubCategoriesService {
             allCourseVideos[i].link = allCourseVideos[i].video_link;
           }
         }
-        findSubCategory.Training_videos = allCourseVideos;
-        return findSubCategory;
+        findSubCategory[0].Training_videos = allCourseVideos;
+        return findSubCategory[0];
       }
     } else {
       for (let i: number = 0; i < allCourseVideos.length; i++) {
@@ -104,8 +107,8 @@ export class TrainingSubCategoriesService {
           allCourseVideos[i].link = allCourseVideos[i].video_link;
         }
       }
-      findSubCategory.Training_videos = allCourseVideos;
-      return findSubCategory;
+      findSubCategory[0].Training_videos = allCourseVideos;
+      return findSubCategory[0];
     }
   }
 
