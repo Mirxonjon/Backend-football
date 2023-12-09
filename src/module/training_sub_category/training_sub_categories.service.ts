@@ -55,6 +55,7 @@ export class TrainingSubCategoriesService {
       },
       select: {
         Training_videos: {
+          id: true,
           video_link: true,
           duration: true,
           sequence: true,
