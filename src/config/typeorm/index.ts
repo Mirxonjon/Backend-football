@@ -15,6 +15,8 @@ import { ShortBooksEntity } from 'src/entities/short_books.entity';
 import { TrainingSubCategoriesEntity } from 'src/entities/training_sub_Category';
 import { MasterclassCategoryEntity } from 'src/entities/masterclass_category';
 import { MasterclassVideosEntity } from 'src/entities/masterclass_Videos';
+import { IndividualTrainingCategoriesEntity } from 'src/entities/individual_training_category';
+import { IndividualTrainingVideosEntity } from 'src/entities/individual_training_videos';
 
 dotenv.config();
 
@@ -29,7 +31,9 @@ export const connectDb: TypeOrmModuleOptions = {
     UsersEntity,
     TrainingCategoriesEntity,
     TrainingSubCategoriesEntity,
-    TrainingVideosEntity,
+    TrainingVideosEntity,,
+    IndividualTrainingCategoriesEntity,
+    IndividualTrainingVideosEntity,
     CompetitionCategoriesEntity,
     CompetitionVideosEntity,
     BooksCategoriesEntity,

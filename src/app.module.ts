@@ -16,6 +16,8 @@ import { ShortBooksModule } from './module/shorts_book/short_books.module';
 import { UsersModule } from './module/users/users.module';
 import { TrainingSubCategoriesModule } from './module/training_sub_category/training_sub_categories.module';
 import { MasterClassVideoModule } from './module/masterclass_video/masterclass_video.module';
+import { IndivudualTrainingCategoriesModule } from './module/individual_training_category/indivudual_training_categories.module';
+import { IndividualTrainingVideosModule } from './module/individual_training_videos/individual_training_videos.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { MasterClassVideoModule } from './module/masterclass_video/masterclass_v
     TrainingCategoriesModule,
     TrainingSubCategoriesModule,
     TrainingVideosModule,
+    IndivudualTrainingCategoriesModule,
+    IndividualTrainingVideosModule,
     CompetitionCategoriesModule,
     CompetitionVideosModule,
     BooksCategoriesModule,

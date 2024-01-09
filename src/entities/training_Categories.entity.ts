@@ -6,7 +6,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { TrainingVideosEntity } from './training_Videos.entity';
 import { TrainingSubCategoriesEntity } from './training_sub_Category';
 
 @Entity()
