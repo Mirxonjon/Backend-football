@@ -77,14 +77,14 @@ export class IndividualTrainingVideosController {
   //   return await this.#_service.findBySubCategory(id);
   // }
 
-  // @UseGuards(jwtGuard)
-  // @Get('/all')
-  // @ApiBadRequestResponse()
-  // @ApiNotFoundResponse()
-  // @ApiOkResponse()
-  // async findall() {
-  //   return await this.#_service.findAll();
-  // }
+  @UseGuards(jwtGuard)
+  @Get('/all')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findall() {
+    return await this.#_service.findAll();
+  }
 
   @Get('/filter/uz?')
   @ApiBadRequestResponse()

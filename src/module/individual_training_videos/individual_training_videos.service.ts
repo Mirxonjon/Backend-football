@@ -110,15 +110,18 @@ export class IndividualTrainingVideosServise {
   //   return findBySubCategory;
   // }
 
-  // async findAll() {
-  //   const findAll = await IndividualTrainingVideosEntity.find({
-  //     relations: {
-  //       sub_Category_id: true,
-  //     },
-  //   });
+  async findAll() {
+    const findAll = await IndividualTrainingVideosEntity.find({
+      relations: {
+        category_id: true,
+      },
+      order:{
+        create_data : 'desc'
+      }
+    });
 
-  //   return findAll;
-  // }
+    return findAll;
+  }
 
   async findOne(id: string, header: CustomHeaders) {
     const findVideo = await IndividualTrainingVideosEntity.findOneBy({ id });
