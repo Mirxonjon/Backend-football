@@ -292,7 +292,7 @@ export class IndividualTrainingVideosServise {
       throw new HttpException('Video not found', HttpStatus.NOT_FOUND);
     }
     const findSubCategory = await IndividualTrainingCategoriesEntity.findOneBy({
-      id: findVideo.category_id.id || body.category_id
+      id:  body.category_id || findVideo.category_id.id 
     });
 
     let formatImage: string = 'Not image';
