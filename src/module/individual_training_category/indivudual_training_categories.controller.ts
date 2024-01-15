@@ -64,11 +64,11 @@ export class IndivudualTrainingCategoriesController {
   @ApiNotFoundResponse()
   @ApiOkResponse()
   async getfilter(
-    @Query('age') age: string,
+    @Query('individualCategory') individual: string,
     @Query('pageNumber') pageNumber: number,
     @Query('pageSize') pageSize: number,
   ) {
-    return await this.#_service.getfilter(age, pageNumber, pageSize);
+    return await this.#_service.getfilter(individual, pageNumber, pageSize);
   }
 
   @Get('/one/:id')
