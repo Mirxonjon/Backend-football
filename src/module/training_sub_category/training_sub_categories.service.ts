@@ -68,7 +68,7 @@ export class TrainingSubCategoriesService {
         },
       },
     });
-    console.log(findSubCategory[0], findSubCategory[0].Training_videos);
+    // console.log(findSubCategory[0], findSubCategory[0].Training_videos);
     let allCourseVideos = [...findSubCategory[0].Training_videos];
 
     if (header.authorization) {
@@ -101,7 +101,9 @@ export class TrainingSubCategoriesService {
     } else {
       for (let i: number = 0; i < allCourseVideos.length; i++) {
         
-        console.log(i , i > 2 );
+        // console.log(i , i > 2 );
+
+        
         if (i >= 2) {
           allCourseVideos[i].active = false;
           allCourseVideos[i].video_link.split();

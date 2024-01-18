@@ -89,19 +89,21 @@ export class IndivudualTrainingCategoriesService {
         },
       },
     });
-    return findCategory;
-    // let allCourseVideos= [...findCategory.Training_videos]
+    // console.log(findCategory);
+    
+    // return findCategory;
+    let allCourseVideos= [...findCategory.videos]
 
     // if(header.access_token){
 
     //   const user  = await this.#_authService.verify(header.access_token)
 
     //   if (user.id && TrainingCategoriesEntity) {
-    //     for (let i : number = 0; i < allCourseVideos.length; i++) {
-    //         allCourseVideos[i].active = true
-    //         allCourseVideos[i].link = allCourseVideos[i].video_link
-    //     }
-    //     return findCategory;
+        for (let i : number = 0; i < allCourseVideos.length; i++) {
+            allCourseVideos[i].active = true
+            allCourseVideos[i].link = allCourseVideos[i].video_link
+        }
+        return allCourseVideos;
     //   } else {
     //     for (let i : number = 0; i < allCourseVideos.length; i++) {
     //       if(i => 2) {
@@ -321,7 +323,7 @@ export class IndivudualTrainingCategoriesService {
     }
 
     const imageLink = await deleteFileCloud(findCategory.image);
-    console.log(imageLink);
+    // console.log(imageLink);
     
 
     if (!imageLink) {
