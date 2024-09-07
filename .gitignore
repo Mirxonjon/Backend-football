@@ -1,8 +1,8 @@
 # compiled output
+/src/utils/key.json
 /dist
 /.env
 /node_modules
-
 # Logs
 logs
 *.log
