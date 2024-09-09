@@ -17,6 +17,7 @@ import { MasterclassCategoryEntity } from 'src/entities/masterclass_category';
 import { MasterclassVideosEntity } from 'src/entities/masterclass_Videos';
 import { IndividualTrainingCategoriesEntity } from 'src/entities/individual_training_category';
 import { IndividualTrainingVideosEntity } from 'src/entities/individual_training_videos';
+import { ShortHistoryEntity } from 'src/entities/short_history.entity';
 
 dotenv.config();
 
@@ -44,6 +45,7 @@ export const connectDb: TypeOrmModuleOptions = {
     MasterclassVideosEntity,
     ShortBookCategoriesEntity,
     ShortBooksEntity,
+    ShortHistoryEntity
   ],
   autoLoadEntities: true,
   synchronize: true,

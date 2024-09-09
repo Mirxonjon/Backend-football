@@ -18,6 +18,7 @@ import { TrainingSubCategoriesModule } from './module/training_sub_category/trai
 import { MasterClassVideoModule } from './module/masterclass_video/masterclass_video.module';
 import { IndivudualTrainingCategoriesModule } from './module/individual_training_category/indivudual_training_categories.module';
 import { IndividualTrainingVideosModule } from './module/individual_training_videos/individual_training_videos.module';
+import { ShortHistoryModule } from './module/short_history/short_history.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { IndividualTrainingVideosModule } from './module/individual_training_vid
     MasterClassVideoModule,
     ShortCategoriesModule,
     ShortBooksModule,
+    ShortHistoryModule
   ],
   controllers: [],
   providers: [],
