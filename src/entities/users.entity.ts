@@ -62,6 +62,18 @@ export class UsersEntity extends BaseEntity {
 
   @Column({
     type: 'character varying',
+    nullable: true,
+  })
+  code: string;
+
+  @Column({
+    type: 'date',
+    nullable: true,
+  })
+  codeTime: Date;
+
+  @Column({
+    type: 'character varying',
     default: 'user',
   })
   role: string;

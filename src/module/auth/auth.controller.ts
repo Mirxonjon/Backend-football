@@ -3,7 +3,7 @@ import { AuthServise } from './auth.service';
 import { Controller } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { SingInUserDto } from './dto/sign_in-user.dto';
+import { SingInUserDto, UpdatePasswordDto, VerifySendCodeMailDto, sendCodeMailDto } from './dto/sign_in-user.dto';
 
 @Controller('Auth')
 @ApiTags('Auth')
@@ -67,5 +67,71 @@ export class AuthController {
   })
   signIn(@Body() body: SingInUserDto) {
     return this.service.signIn(body);
+  }
+
+
+  @Post('/send-code-mail')
+  @HttpCode(HttpStatus.OK)
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['gmail'],
+      properties: {
+        gmail: {
+          type: 'string',
+          default: 'Eshmat@gmail.com',
+        },
+     
+      },
+    },
+  })
+  sendCodeMail(@Body() body: sendCodeMailDto) {
+    return this.service.sendCodeMail(body);
+  }
+
+  @Post('/verify-send-code-mail')
+  @HttpCode(HttpStatus.OK)
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['gmail'],
+      properties: {
+        gmail: {
+          type: 'string',
+          default: 'Eshmat@gmail.com',
+        },
+        code: {
+          type: 'string',
+          default: '1265',
+        },
+     
+      },
+    },
+  })
+  verifySendCodeMail(@Body() body: VerifySendCodeMailDto) {
+    return this.service.verifySendCodeMail(body);
+  }
+
+  @Post('/update-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['gmail'],
+      properties: {
+        gmail: {
+          type: 'string',
+          default: 'Eshmat@gmail.com',
+        },
+        password: {
+          type: 'string',
+          default: '1265',
+        },
+     
+      },
+    },
+  })
+  updatePassword(@Body() body: UpdatePasswordDto) {
+    return this.service.updatePassword(body);
   }
 }

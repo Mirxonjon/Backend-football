@@ -7,7 +7,8 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersEntity } from 'src/entities/users.entity';
-import { SingInUserDto } from './dto/sign_in-user.dto';
+import { SingInUserDto, UpdatePasswordDto, VerifySendCodeMailDto, sendCodeMailDto } from './dto/sign_in-user.dto';
+import { generateRandomFiveDigitNumber } from 'src/utils/random';
 
 @Injectable()
 export class AuthServise {
@@ -69,7 +70,85 @@ export class AuthServise {
       token: this.sign(finduser.id, finduser.role),
     };
   }
+  
+  async sendCodeMail(body: sendCodeMailDto) {
+    const finduser = await UsersEntity.findOne({
+      where: {
+        email: body.gmail,
+      },
+    }).catch((e) => {
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    });
 
+    if (!finduser) {
+      throw new HttpException('Not found Gmail', HttpStatus.NOT_FOUND);
+    }
+    let randomCode = generateRandomFiveDigitNumber()
+    const updatedUser = await UsersEntity.update(finduser.id , {
+      code : randomCode.toString(),
+      codeTime: new Date(),
+    });
+
+    return {
+      randomCode , 
+      message: 'send code',
+      // token: this.sign(finduser.id, finduser.role),
+    };
+  }
+
+  async verifySendCodeMail(body: VerifySendCodeMailDto) {
+    const finduser = await UsersEntity.findOne({
+      where: {
+        email: body.gmail,
+      
+      },
+    }).catch((e) => {
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    });
+
+    if (!finduser) {
+      throw new HttpException('Not found Gmail', HttpStatus.BAD_REQUEST);
+    }
+
+    if(finduser.code != body.code.toString()) {
+      throw new HttpException('wrong password', HttpStatus.NOT_FOUND);
+    }
+
+
+    // const updatedUser = await UsersEntity.update(finduser.id , {
+    //   code : randomCode.toString()
+    // });
+
+    return {
+      status : 200 , 
+      message: 'successful',
+      // token: this.sign(finduser.id, finduser.role),
+    };
+  }
+
+  async updatePassword(body: UpdatePasswordDto) {
+    const finduser = await UsersEntity.findOne({
+      where: {
+        email: body.gmail,
+      
+      },
+    }).catch((e) => {
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    });
+
+    if (!finduser) {
+      throw new HttpException('Not found Gmail', HttpStatus.BAD_REQUEST);
+    }
+    const updatedUser = await UsersEntity.update(finduser.id , {
+     password: body.password
+    });
+
+    return {
+      status : 200 , 
+      message: 'successful',
+      // token: this.sign(finduser.id, finduser.role),
+    };
+  }
   sign(id: string, role: string) {
     return this.jwtServise.sign({ id, role });
   }
@@ -87,4 +166,5 @@ export class AuthServise {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
 }
