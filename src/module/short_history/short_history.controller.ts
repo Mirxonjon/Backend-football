@@ -29,7 +29,7 @@ import {
 } from '@nestjs/swagger';
 import { ShortHistoryServise } from './short_history.service';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { CreateShortHistoryDto } from './dto/create_history.dto';
+import { CreateSeenHistoryDto, CreateShortHistoryDto } from './dto/create_history.dto';
 import { UpdateShortHistoryDto } from './dto/update_history.dto';
 import { jwtGuard } from '../auth/guards/jwt.guard';
 @Controller()
@@ -40,8 +40,6 @@ export class ShortHistoryController {
   constructor(service: ShortHistoryServise) {
     this.#_service = service;
   }
-  
- 
 
   @Get('ShortHistory/all')
   @ApiBadRequestResponse()
@@ -51,14 +49,20 @@ export class ShortHistoryController {
     return await this.#_service.findAll();
   }
 
-
   @Get('ShortHistory/one/:id')
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiOkResponse()
-  async findOne(@Param('id') id: string ) {
-    
+  async findOne(@Param('id') id: string) {
     return await this.#_service.findOne(id);
+  }
+
+  @Get('ShortHistory/all-with-seen')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
+  async findAllwithSeen(@Headers() header: any) {
+    return await this.#_service.findAllwithSeen(header);
   }
 
   @UseGuards(jwtGuard)
@@ -67,10 +71,7 @@ export class ShortHistoryController {
   @ApiBody({
     schema: {
       type: 'object',
-      required: [
-        'title',
-        'history_image'
-      ],
+      required: ['title', 'history_image'],
       properties: {
         title: {
           type: 'string',
@@ -88,19 +89,32 @@ export class ShortHistoryController {
   @ApiCreatedResponse()
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @UseInterceptors(
-    FileFieldsInterceptor([{ name: 'history_image' }]),
-  )
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'history_image' }]))
   async create(
     @UploadedFiles()
-    files: { history_image?: Express.Multer.File; },
+    files: { history_image?: Express.Multer.File },
     @Body() createShortHistoryDto: CreateShortHistoryDto,
   ) {
-    
     return await this.#_service.create(
       createShortHistoryDto,
       files.history_image[0],
     );
+  }
+
+  @UseGuards(jwtGuard)
+  @Post('ShortHistory/seen-create')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiBody({ type: CreateSeenHistoryDto })
+  // @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Attendance Punch In' })
+  @ApiCreatedResponse()
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  async createSeen(
+    @Headers() header: any,
+    @Body() createSeenHistoryDto: CreateSeenHistoryDto,
+  ) {
+    return await this.#_service.createSeen(header, createSeenHistoryDto);
   }
 
   @UseGuards(jwtGuard)
@@ -125,14 +139,12 @@ export class ShortHistoryController {
   @ApiOperation({ summary: 'Attendance Punch In' })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
-  @UseInterceptors(
-    FileFieldsInterceptor([{ name: 'history_image' }]),
-  )
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'history_image' }]))
   async update(
     @Param('id') id: string,
     @Body() updateShortHistoryDto: UpdateShortHistoryDto,
     @UploadedFiles()
-    file: { history_image?: Express.Multer.File; },
+    file: { history_image?: Express.Multer.File },
   ) {
     await this.#_service.update(
       id,

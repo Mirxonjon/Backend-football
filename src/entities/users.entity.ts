@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { TakeEntity } from './take.entity';
 import { TakeBooksEntity } from './take_books.entity';
+import { SeenHistoryEntity } from './seen_short_history.entity';
 
 @Entity()
 export class UsersEntity extends BaseEntity {
@@ -86,4 +87,10 @@ export class UsersEntity extends BaseEntity {
 
   @OneToMany(() => TakeBooksEntity, (take_book) => take_book.user_id)
   take_books_users: TakeEntity[];
+
+  @OneToMany(
+    () => SeenHistoryEntity,
+    (seen_history) => seen_history.userId,
+  )
+  seen_histories: SeenHistoryEntity[];
 }

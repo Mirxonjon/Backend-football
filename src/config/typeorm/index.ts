@@ -18,6 +18,7 @@ import { MasterclassVideosEntity } from 'src/entities/masterclass_Videos';
 import { IndividualTrainingCategoriesEntity } from 'src/entities/individual_training_category';
 import { IndividualTrainingVideosEntity } from 'src/entities/individual_training_videos';
 import { ShortHistoryEntity } from 'src/entities/short_history.entity';
+import { SeenHistoryEntity } from 'src/entities/seen_short_history.entity';
 
 dotenv.config();
 
@@ -32,7 +33,8 @@ export const connectDb: TypeOrmModuleOptions = {
     UsersEntity,
     TrainingCategoriesEntity,
     TrainingSubCategoriesEntity,
-    TrainingVideosEntity,,
+    TrainingVideosEntity,
+    ,
     IndividualTrainingCategoriesEntity,
     IndividualTrainingVideosEntity,
     CompetitionCategoriesEntity,
@@ -45,7 +47,8 @@ export const connectDb: TypeOrmModuleOptions = {
     MasterclassVideosEntity,
     ShortBookCategoriesEntity,
     ShortBooksEntity,
-    ShortHistoryEntity
+    ShortHistoryEntity,
+    SeenHistoryEntity,
   ],
   autoLoadEntities: true,
   synchronize: true,
