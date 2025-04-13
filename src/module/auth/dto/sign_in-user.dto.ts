@@ -1,4 +1,4 @@
-import { IsString, MaxLength } from 'class-validator';
+import { IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class SingInUserDto {
   @IsString()
@@ -11,9 +11,21 @@ export class SingInUserDto {
 }
 
 export class sendCodeMailDto {
+  @IsOptional()
   @IsString()
   gmail: string;
 
+  @IsOptional()
+  @IsString()
+  name: string;
+
+  @IsOptional()
+  @IsString()
+  password: string;
+  
+  @IsOptional()
+  @IsString()
+  phone: string;
 }
 
 export class VerifySendCodeMailDto {

@@ -25,12 +25,13 @@ export class UsersEntity extends BaseEntity {
   @Column({
     type: 'character varying',
     length: 100,
-    nullable: false,
+    nullable: true,
   })
   name: string;
 
   @Column({
     type: 'character varying',
+    nullable: true,
   })
   phone: string;
 
@@ -45,13 +46,13 @@ export class UsersEntity extends BaseEntity {
   @Column({
     type: 'character varying',
     length: 100,
-    nullable: false,
+    nullable: true,
   })
   password: string;
 
   @Column({
     type: 'character varying',
-    nullable: false,
+    nullable: true,
   })
   was_born_date: string;
 
@@ -68,7 +69,7 @@ export class UsersEntity extends BaseEntity {
   code: string;
 
   @Column({
-    type: 'date',
+    type: 'timestamp',
     nullable: true,
   })
   codeTime: Date;
@@ -88,9 +89,6 @@ export class UsersEntity extends BaseEntity {
   @OneToMany(() => TakeBooksEntity, (take_book) => take_book.user_id)
   take_books_users: TakeEntity[];
 
-  @OneToMany(
-    () => SeenHistoryEntity,
-    (seen_history) => seen_history.userId,
-  )
+  @OneToMany(() => SeenHistoryEntity, (seen_history) => seen_history.userId)
   seen_histories: SeenHistoryEntity[];
 }

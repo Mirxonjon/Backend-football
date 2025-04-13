@@ -3,7 +3,12 @@ import { AuthServise } from './auth.service';
 import { Controller } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { SingInUserDto, UpdatePasswordDto, VerifySendCodeMailDto, sendCodeMailDto } from './dto/sign_in-user.dto';
+import {
+  SingInUserDto,
+  UpdatePasswordDto,
+  VerifySendCodeMailDto,
+  sendCodeMailDto,
+} from './dto/sign_in-user.dto';
 
 @Controller('Auth')
 @ApiTags('Auth')
@@ -69,6 +74,35 @@ export class AuthController {
     return this.service.signIn(body);
   }
 
+  @Post('/register-with-mail')
+  @HttpCode(HttpStatus.OK)
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['gmail'],
+      properties: {
+        gmail: {
+          type: 'string',
+          default: 'mirxonjonismanov152@gmail.com',
+        },
+        name: {
+          type: 'string',
+          default: 'mirxonjonismanov152@gmail.com',
+        },
+        password: {
+          type: 'string',
+          default: 'Eshmat@gmail.com',
+        },
+        phone: {
+          type: 'string',
+          default: 'Eshmat@gmail.com',
+        },
+      },
+    },
+  })
+  RegistorWithMail(@Body() body: sendCodeMailDto) {
+    return this.service.RegistorWithMail(body);
+  }
 
   @Post('/send-code-mail')
   @HttpCode(HttpStatus.OK)
@@ -81,7 +115,6 @@ export class AuthController {
           type: 'string',
           default: 'Eshmat@gmail.com',
         },
-     
       },
     },
   })
@@ -104,7 +137,6 @@ export class AuthController {
           type: 'string',
           default: '1265',
         },
-     
       },
     },
   })
@@ -127,7 +159,6 @@ export class AuthController {
           type: 'string',
           default: '1265',
         },
-     
       },
     },
   })
