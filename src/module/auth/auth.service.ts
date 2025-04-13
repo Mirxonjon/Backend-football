@@ -108,12 +108,12 @@ export class AuthServise {
         throw new HttpException('Bad Request ', HttpStatus.BAD_REQUEST);
       });
 
-    const res = await sendEmail(
-      body.gmail,
-      'CoachingZone dasturiga kirish uchun kode: ',
-      randomCode.toString(),
-    );
-    console.log(res, addedUser);
+    // const res = await sendEmail(
+    //   body.gmail,
+    //   'CoachingZone dasturiga kirish uchun kode: ',
+    //   randomCode.toString(),
+    // );
+    // console.log(res, addedUser);
     if (!addedUser) {
       throw new HttpException(
         'Eror create user',
@@ -146,11 +146,11 @@ export class AuthServise {
       codeTime: new Date(),
     });
 
-    const res = await sendEmail(
-      body.gmail,
-      'CoachingZone dasturiga kirish uchun kode: ',
-      randomCode.toString(),
-    );
+    // const res = await sendEmail(
+    //   body.gmail,
+    //   'CoachingZone dasturiga kirish uchun kode: ',
+    //   randomCode.toString(),
+    // );
 
     return {
       randomCode,
