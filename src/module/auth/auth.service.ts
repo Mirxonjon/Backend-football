@@ -122,7 +122,7 @@ export class AuthServise {
     }
 
     return {
-      // randomCode,
+      randomCode,
       message: 'send code',
       // token: this.sign(finduser.id, finduser.role),
     };
@@ -153,7 +153,7 @@ export class AuthServise {
     );
 
     return {
-      // randomCode,
+      randomCode,
       message: 'send code',
       // token: this.sign(finduser.id, finduser.role),
     };
